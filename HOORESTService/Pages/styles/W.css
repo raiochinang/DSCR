@@ -1,0 +1,130 @@
+﻿body {
+}
+
+
+
+.km-camera:before, .km-camera:after {
+    content: "\E0D0";
+}
+
+.km-printer:before, .km-printer:after {
+    content: "\E07E";
+}
+
+.km-comments:before, .km-comments:after {
+    content: "\E093";
+}
+
+.km-mydrawer:before, .km-mydrawer:after {
+    content: "\e077";
+}
+
+.km-dashboard:before, .km-dashboard:after {
+    content: "\e0c5";
+}
+
+.km-purchase:before, .km-purchase:after {
+    content: "\e206";
+}
+
+.km-delivery:before, .km-delivery:after {
+    content: "\e306";
+}
+
+.km-warehouse:before, .km-warehouse:after {
+    content: "\e312";
+}
+
+.km-stock:before, .km-stock:after {
+    content: "\e04d";
+}
+
+.km-folder:before, .km-folder:after {
+    content: "\e0a1";
+}
+
+.km-report:before, .km-report:after {
+    content: "\e09c";
+}
+
+.km-process:before, .km-process:after {
+    content: "\e04c";
+}
+
+.km-print:before, .km-print:after {
+    content: "\e07e";
+}
+
+.km-delete:before, .km-delete:after {
+    content: "\e031";
+}
+
+
+
+
+
+.fieldlist {
+    margin: 0 0 -2em;
+    padding: 0;
+}
+
+    .fieldlist li {
+        list-style: none;
+        padding-bottom: 6px;
+    }
+
+    .fieldlist label {
+        display: block;
+        padding-bottom: 6px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 16px;
+        color: black;
+        float: left;
+        width: 45%;
+    }
+
+.content-wrapper {
+    width: 350px;
+    float: left;
+    margin-left: 20px;
+}
+
+.content-wrapper-header {
+    clear: both;
+    min-height: 120px;
+    margin-bottom: 10px;
+}
+
+.PurchaseInRemarks-wrapper {
+    margin-top: 10px;
+    margin-left: 20px;
+    display: block;
+    padding-bottom: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.buttons-wrapper {
+    margin-left: 20px;
+    margin-top: 4px;
+}
+
+    .buttons-wrapper .km-button {
+        font-size: 30px;
+        color: cornflowerblue;
+    }
+
+        .buttons-wrapper .km-button:hover {
+            color: blue;
+        }
+
+
+.k-window-titlebar {
+    height: 40px !important;
+}
+
+.k-window div.k-window-content {
+    overflow: hidden;
+}

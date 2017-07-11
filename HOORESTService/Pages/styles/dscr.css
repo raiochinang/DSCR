@@ -1,0 +1,44 @@
+﻿.k-i-mydrawer:before,
+.k-i-mydrawer:after {
+    content: "\e077";
+}
+
+label {
+    width: 60px;
+}
+
+.row {
+    margin-top: 4px;
+    margin-left: 1px;
+}
+
+.r-textbox {
+    width: 160px;
+}
+.r-textbox-barcode {
+    width: 300px;
+}
+/*#DSCRTime, #DSCRDate
+{
+    margin-top: 3px;
+}*/
+
+#DSCRDoctorSearch {
+    cursor: pointer;
+}
+
+.r-numeric-textbox {
+ text-align:right;
+  width: 100px;
+}
+.k-textbox > input, .k-autocomplete .k-input, .k-picker-wrap .k-input, .k-numeric-wrap .k-input, .k-dropdown-wrap .k-input, .k-selectbox .k-input {
+    height: 30px !important;
+}
+
+#buttonPost, #buttonReset, #buttonClose {
+    width: 100%;
+}
+
+r-label {
+    font-weight:bold;
+}

@@ -1,0 +1,325 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="~/../styles/reset.css?v=1" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    <link href="~/../styles/index.css?v=1" rel="stylesheet" />
+
+   
+
+
+    <script src="~/../kendo/js/jquery.min.js"></script>
+    <!--<script src="~/../scripts/bootstrap.js"></script>-->
+    <script src="~/../kendo/js/kendo.all.min.js"></script>
+    <script src="~/../scripts/index.js?v=5"></script>
+
+
+</head>
+<body>
+
+    <!--drawer-->
+    <div data-role="drawer" id="left-drawer" style="width: 20em;" data-title="Menu" data-views="['dscr', 'summary', 'admin']" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+            </div>
+        </header>
+
+        <ul data-role="listview" class="km-listview-icons">
+            <li data-icon="mostviewed">
+                <a href="#dscr">
+                    DSCR
+                </a>
+            </li>
+            <li data-icon="summary">
+                <a href="#summary">
+                    Summary
+                </a>
+            </li>
+            <li data-icon="contacts" id="UserMaintenanceList">
+                <a href="#admin">
+                    User Maintenance
+                </a>
+            </li>
+            <li data-icon="logout">
+                <a href="#logout">
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--views-->
+    <div data-role="view" id="dscr" data-title="Daily Sales & Collection Report" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="dscrContent">
+            <div id="main-wrapper">
+                <div class="main-wrapper-column main-wrapper-column1">
+                    <ul data-role="listview">
+                        <li>
+                            <label>Prefix:</label>
+                            <input type="text" id="dscrPrefix" disabled />
+                        </li>
+                        <li>
+                            <label>RR:</label>
+                            <input type="text" id="dscrRR" style="right: 10%;width: 60%;" required />
+                            <button id="btnRRSearch" style="position: absolute;right: 10px; height: 70%;"></button>
+                        </li>
+                        <li>
+                            <label>SI:</label>
+                            <input type="text" id="dscrSI" />
+                        </li>
+                        <li>
+                            <label>OR:</label>
+                            <input type="text" id="dscrOR" />
+                        </li>
+                        <li>
+                            <label>Branch:</label>
+                            <input type="text" id="branchddl" />
+                        </li>
+                    </ul>
+                </div>
+                <div class="main-wrapper-column main-wrapper-column2">
+                    <ul data-role="listview">
+                        <li>
+                            <label>Doctor:</label>
+                            <input type="text" id="dscrDoctor" style="right: 10%;width: 60%;" />
+                            <button id="btnDoctorSearch" style="position: absolute;right: 10px; height: 70%;"></button>
+                        </li>
+                        <li>
+                            <label>P. Asst:</label>
+                            <input type="text" id="dscrPAsst" style="right: 10%;width: 60%;" />
+                            <button id="btnPAsstSearch" style="position: absolute;right: 10px; height: 70%;"></button>
+                        </li>
+                        <li>
+                            <label>Patient:</label>
+                            <input type="text" id="dscrPatient" style="right: 10%;width: 60%;" />
+                            <button id="btnPatientSearch" style="position: absolute;right: 10px; height: 70%;"></button>
+                        </li>
+                        <li>
+                            <label>Date:</label>
+                            <input type="text" id="dscrDate" style="position: absolute;right: 9px;top: 3px;width: 68%;" />
+                        </li>
+                        <li>
+                            <label>From:</label>
+                            <input type="text" id="dscrTimeFrom" style="position: absolute;right: 9px;top: 3px;width: 68%;" />
+                        </li>
+                        <li>
+                            <label>To:</label>
+                            <input type="text" id="dscrTimeTo" style="position: absolute;right: 9px;top: 3px;width: 68%;" />
+                        </li>
+                    </ul>
+                </div>
+                <div class="main-wrapper-column main-wrapper-column3">
+                    <ul data-role="listview">
+                        <li>
+                            <label>Cash:</label>
+                            <input type="text" id="dscrCash" style="position: absolute;right: 0px;top: 3px;width: 70%; text-align: right;" />
+                        </li>
+                        <li>
+                            <label>Check:</label>
+                            <input type="text" id="dscrCheck" style="right: 10%;width: 60%; text-align:right;" disabled />
+                            <button id="btnCheckAdd" style="position: absolute;right: 10px; height: 70%;"></button>
+                        </li>
+                        <li>
+                            <label>AR:</label>
+                            <input type="text" id="dscrAR" style="position: absolute;right: 0px;top: 3px;width: 70%; text-align: right;" disabled />
+                        </li>
+                        <li>
+                            <label>Credit Card:</label>
+                            <input type="text" id="dscrCreditCard" style="right: 10%;width: 60%; text-align: right;" disabled />
+                            <button id="btnCreditCardAdd" style="position: absolute;right: 10px; height: 70%;"></button>
+                        </li>
+                        <li>
+                            <label>Total Payment:</label>
+                            <input type="text" id="dscrTotalPayment" style="position: absolute;right: 0px;top: 3px;width: 70%; text-align: right;" disabled />
+                        </li>
+                        <li>
+                            <label>Cashier:</label>
+                            <input type="text" id="dscrCashier" style="right: 10%;width: 60%;" />
+                            <button id="btnCashierSearch" style="position: absolute;right: 10px; height: 70%;"></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="details-wrapper">
+                <div id="dscrGrid"></div>
+            </div>
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+                <button class="btnPrint" data-align="right">PRINT</button>
+                <button class="btnSave" data-align="right">SAVE</button>
+                <button class="btnCancel" data-align="right">RESET</button>
+            </div>
+        </footer>
+    </div>
+    <div data-role="view" id="summary" data-title="Summary" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content">
+            <div class="">
+                <div style="margin:10px;">
+                    <input type="text" id="dscrPrefixSearch" class="k-textbox" disabled />
+                    <input type="text" id="dscrRRSearch" class="k-textbox" placeholder="RR Number" />
+                    <button id="btnRRSearchSummary">Find by RR</button>
+                </div>
+                <div style="margin:10px;">
+                    <input type="text" id="dscrFromSearch" />
+                    <input type="text" id="dscrToSearch" />
+                    <button id="btnDateRangeSearchSummary">Find by Date Range</button>
+                </div>
+                <div>
+                    <div id="SummaryGrid"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div data-role="view" id="admin" data-title="Summary" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content">
+            <div>
+                <div id="adminGrid"></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!--window-->
+    <div id="LoginWindow">
+        <div class="windowHeader">
+            Login
+        </div>
+        <div>
+            <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="mjagapinan" />
+        </div>
+        <div>
+            <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="password12" />
+        </div>
+        <div>
+            <button class="btnLogin" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">LOG IN</button>
+        </div>
+    </div>
+    <div id="DoctorWindow">
+        <div class="windowHeader">
+            Doctors
+        </div>
+        <div id="DoctorWindowList" style="height:215px; overflow: auto;"></div>
+        <button id="btnDoctorWindowCancel" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
+    </div>
+    <div id="NurseWindow">
+        <div class="windowHeader">
+            Nurses
+        </div>
+        <div id="NurseWindowList" style="height:215px; overflow: auto;"></div>
+        <button id="btnNurseWindowCancel" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
+    </div>
+    <div id="PatientWindow">
+        <div class="windowHeader">
+            Patients
+        </div>
+        <div id="PatientWindowList" style="height:215px; overflow: auto;"></div>
+        <button id="btnPatientWindowCancel" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
+    </div>
+    <div id="CheckWindow">
+        <div class="windowHeader">
+            Check
+        </div>
+        <div id="CheckWindowGrid"></div>
+
+        <button id="btnCheckWindowConfirm" data-align="center" style="position:absolute; bottom: 4px; right: 90px;">CONFIRM</button>
+        <button id="btnCheckWindowCancel" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
+    </div>
+    <div id="CreditCardWindow">
+        <div class="windowHeader">
+            Credit Card
+        </div>
+        <div id="CreditCardWindowGrid"></div>
+
+        <button id="btnCreditCardWindowConfirm" data-align="center" style="position:absolute; bottom: 4px; right: 90px;">CONFIRM</button>
+        <button id="btnCreditCardWindowCancel" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
+    </div>
+    <div id="CashierWindow">
+        <div class="windowHeader">
+            Cashier
+        </div>
+        <div id="CashierWindowList" style="height:215px; overflow: auto;"></div>
+        <button id="btnCashierWindowCancel" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
+    </div>
+    <div id="DSCRWindow">
+        <div class="container-barcode">
+            <div class="label">Barcode:</div>
+            <input type="text" class="text" id="Barcode" />
+            <div id="particularName"></div>
+        </div>
+        <div class="container">
+            <div class="label">Gross:</div>
+            <input type="text" id="DSCRWindowGross" style="text-align: right; width: 200px" disabled />
+            <div class="label">Quantity:</div>
+            <input type="text" id="DSCRWindowQty" style="text-align: right;" />
+            <div class="label">Session:</div>
+            <input type="text" id="DSCRWindowSession" style="text-align: right;" />
+            <div class="label">Discount:</div>
+            <input type="text" class="DSCRWindowDecimal" id="DSCRWindowDiscount" style="text-align: right;" />
+            <div class="label">Deduction:</div>
+            <input type="text" class="DSCRWindowDecimal" id="DSCRWindowDeduction" style="text-align: right;" />
+            <div class="label">Adv Payment:</div>
+            <input type="text" class="DSCRWindowDecimal" id="DSCRWindowAdvancePayment" style="text-align: right;" />
+            <div class="label">Prg Avail:</div>
+            <input type="text" class="DSCRWindowDecimal" id="DSCRWindowProgramAvail" style="text-align: right;" />
+            <div class="label">Add Ons:</div>
+            <input type="text" class="DSCRWindowDecimal" id="DSCRWindowAddOns" style="text-align: right;" />
+            <div class="label">Net Sale:</div>
+            <input type="text" class="DSCRWindowDecimal" id="DSCRWindowNetSale" style="text-align: right;" disabled />
+            <div class="label">Explanation:</div>
+            <textarea id="DSCRWindowExplanation" style="height:40px"></textarea>
+        </div>
+        <button id="btnDSCRWindowPost" data-align="center" style="position:absolute; bottom: 4px; right: 80px;">POST</button>
+        <button id="btnDSCRWindowClose" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
+        <button id="btnDSCRWindowReset" data-align="center" style="position:absolute; bottom: 4px; right: 140px;">RESET</button>
+    </div>
+    <!--templates-->
+    <script type="text/x-kendo-template" id="DoctorWindowListTemplate">
+        <div class="DoctorWindowListItem WindowListItem" data-id="#:id#">#:name#</div>
+    </script>
+    <script type="text/x-kendo-template" id="NurseWindowListTemplate">
+        <div class="NurseWindowListItem WindowListItem" data-id="#:id#">#:name#</div>
+    </script>
+    <script type="text/x-kendo-template" id="PatientWindowListTemplate">
+        <div class="PatientWindowListItem WindowListItem" data-id="#:id#">#:name#</div>
+    </script>
+    <script type="text/x-kendo-template" id="CashierWindowListTemplate">
+        <div class="CashierWindowListItem WindowListItem" data-id="#:id#">#:name#</div>
+    </script>
+    <script type="text/x-kendo-template" id="dscrGridToolbar">
+        <button id="dscrGridToolbarButton">Add Details</button>
+        <div style="float:right; font-size: 20px; font-weight: bold; color:blue;" id="TotalGrid"></div>
+        <div style="float:right; font-size: 20px; font-weight: bold; color:blue;">Total: </div>
+    </script>
+    <span id="notification">
+        SAVE
+    </span>
+</body>
+</html>

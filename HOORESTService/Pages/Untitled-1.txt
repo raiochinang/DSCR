@@ -1,0 +1,32 @@
+<div data-role="content">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="row"><label>RR:</label><input type="text" data-bind="value: RR" class="k-textbox" style="width:40px;"
+                            /><input type="text" data-bind="value: RR" class="k-textbox" style="width:120px;" /></div>
+                        <div class="row"><label>SI:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row"><label>OR:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row"><label>Doctor:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row" style="margin-left: 0px;">
+                            <label>Doctor:</label>
+                            <span class="r-textbox k-space-right">
+                            <input type="text" data-bind="value: RR" class="k-textbox r-textbox" />
+                            <a class="k-icon k-filter"></a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="row"><label>P.Asst:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row"><label>Patient:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row"><label>Date:</label><input id="DSCRDate" type="text" data-bind="value: Date" class="r-textbox" /></div>
+                        <div class="row"><label>Time:</label><input id="DSCRTime" type="text" data-bind="value: Time" class="r-textbox" /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    right
+                </div>
+            </div>
+            <div class="row">
+                grid
+            </div>
+        </div>

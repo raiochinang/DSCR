@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--<link href="~/../kendo/styles/kendo.bootstrap.min.css" rel="stylesheet" />-->
+    <link href="~/../styles/bootstrap.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    <link href="~/../styles/dscr.css" rel="stylesheet" />
+    <link href="~/../styles/font-awesome.min.css" rel="stylesheet" />
+
+
+    <script src="~/../kendo/js/jquery.min.js"></script>
+    <script src="~/../scripts/bootstrap.js"></script>
+    <script src="~/../kendo/js/kendo.all.min.js"></script>
+    <script src="~/../scripts/dscr.js"></script>
+
+
+
+</head>
+
+<body>
+    <!--menu-->
+    <div id="left-drawer" data-role="drawer" data-title="Menu" style="width: 20em; height: 100%" data-views="['mainview', 'reportview']">
+
+        <header data-role=" header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+            </div>
+        </header>
+        <ul data-role="listview" class="km-listview-icons">
+            <li data-icon="report">
+                <a href="#mainview">
+                    DSCR
+                </a>
+            </li>
+            <li data-icon="report">
+                <a href="#reportview">
+                    Report
+                </a>
+            </li>
+            <li data-icon="logout">
+                <a href="">
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!--views-->
+    <!--<div data-role="view" id="dscrview" data-title="Report" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content">
+            content
+        </div>
+    </div>-->
+    <div data-role="view" id="mainview" data-title="Daily Sales & Collection Report" data-use-native-scrolling="true" data-scroller='{"elastic": false}'>
+        <header data-role="header" id="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-align="left">Menu</a>
+                <a data-role="button" data-align="right">Save</a>
+                <a data-role="button" data-align="right">Cancel</a>
+                <a data-role="button" data-align="right">Print</a>
+            </div>
+        </header>
+        <content data-role="content">
+            <div class="row" style="margin-top: 10px;" id="row1">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="row" style="margin-left: 0px;">
+                            <label>RR:</label>
+                            <span class="k-space-right" style="margin-left: -3px;">
+                                <input type="text" data-bind="value: RR" class="k-textbox r-textbox" style="width:50px;" disabled />
+                                <input type="text" data-bind="value: RR" class="k-textbox" style="width:110px; margin-left: -4px;" />
+                                <a class="k-icon k-i-search" id="DSCRRRSearch" data-bind="click: DSCRDoctorSearch"></a>
+                            </span>
+                        </div>
+                        <div class="row"><label>SI:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row"><label>OR:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row" style="margin-left: 0px;">
+                            <label>Doctor:</label>
+                            <span class="k-space-right" style="margin-left: -3px;">
+                                <input id="DSCRDoctor" type="text" data-bind="value: RR" class="k-textbox r-textbox" disabled />
+                                <a class="k-icon k-i-search" id="DSCRDoctorSearch" data-bind="click: DSCRDoctorSearch"></a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="row" style="margin-left: 0px;">
+                            <label>P.Asst:</label>
+                            <span class="k-space-right" style="margin-left: -3px;">
+                                <input id="DSCRAsst" type="text" data-bind="value: Asst" class="k-textbox r-textbox" disabled />
+                                <a class="k-icon k-i-search" id="DSCRAsstSearch" data-bind="click: DSCRDoctorSearch"></a>
+                            </span>
+                        </div>
+                        <div class="row"><label>Patient:</label><input type="text" data-bind="value: RR" class="k-textbox r-textbox" /></div>
+                        <div class="row"><label>Date:</label><input id="DSCRDate" type="text" data-bind="value: Date" class="r-textbox" /></div>
+                        <div class="row"><label>Time:</label><input id="DSCRTime" type="text" data-bind="value: Time" class="r-textbox" /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="background-color: #FFF7F7; border: 1px solid rgb(197, 197, 197);">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="row"><label>Cash:</label><input id="DSCRCash" data-bind="value: Cash" class="r-numeric-textbox" data-align="right" /></div>
+                        <div class="row"><label>Check:</label><input id="DSCRCheck" data-bind="value: Check" class="r-numeric-textbox" /></div>
+                        <div class="row"><label>AR:</label><input id="DSCRAR" data-bind="value: AR" class="r-numeric-textbox" /></div>
+                        <div class="row"><label>C. Card:</label><input id="DSCRCC" data-bind="value: CC" class="r-numeric-textbox" /></div>
+                        <div class="row"><label>Total:</label><input id="DSCRTotal" data-bind="value: Total" class="r-numeric-textbox" disabled /></div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <div id="paymentGrid"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="background-color: #CCCDD1">
+                <grid id="DSCRGrid">
+
+                </grid>
+            </div>
+        </content>
+        <footer data-role="footer" id="footer">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+            </div>
+        </footer>
+
+        
+    </div>
+
+    <script>
+        kendo.mobile.ui.Drawer.current = null;
+        var app = new kendo.mobile.Application(document.body, { skin: "flat" });
+    </script>
+
+    <!--Window-->
+    <div data-role="modalview" id="DSCRWindow" style="display: block; width: 400px; height: 400px;">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Particular:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><span data-bind="text: Particular"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Qty/Sess:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><input id="DSCRWindowQty" class="r-numeric-textbox" data-bind="value: Qty" /></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Gross:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><input id="DSCRWindowGross" class="r-numeric-textbox" data-bind="value: Gross" /></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Discount:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><input id="DSCRWindowDiscount" class="r-numeric-textbox" /></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Deduction:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><input id="DSCRWindowDeduction" class="r-numeric-textbox" /></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Adv. Payment:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><input id="DSCRWindowAdvPayment" class="r-numeric-textbox" /></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Add Ons:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><input id="DSCRWindowAddons" class="r-numeric-textbox" /></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Netsale:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><input id="DSCRWindowNetsale" class="r-numeric-textbox" /></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"><r-label>Explanation:</r-label></div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"><textarea id="DSCRWindowExplanation" style="width:100%"></textarea></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <a data-role="button" data-align="right" id="buttonReset" data-bind="click: Reset">Reset</a>
+            </div>            
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <a data-role="button" data-align="right" id="buttonPost" data-bind="click: Post">Post</a>
+            </div>            
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <a data-role="button" data-align="right" id="buttonClose" data-bind="click: Close">Close</a>
+            </div>            
+        </div>
+    </div>
+    <!--templates-->
+    <script type="text/x-kendo-template" id="DSCRGridToolbarTemplate">
+        <div class="row" style="margin-left: 0px;">
+            <label style="width: 70px;">Barcode:</label>
+            <span class="k-space-right" style="margin-left: -3px;">
+                <input id="DSCRBarcode" type="text" class="k-textbox r-textbox-barode" />
+                <a class="k-icon k-i-search" id="DSCRBarcodeSearch"></a>
+            </span>
+        </div>
+    </script>
+</body>
+
+</html>

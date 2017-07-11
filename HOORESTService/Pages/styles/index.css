@@ -1,0 +1,162 @@
+﻿.km-list input[type=password], .km-list input[type=search], .km-list input[type=number], .km-list input[type=tel], .km-list input[type=url], .km-list input[type=email], .km-list input[type=month], .km-list input[type=color], .km-list input[type=week], .km-list input[type=date], .km-list input[type=time], .km-list input[type=datetime], .km-list input[type=datetime-local], .km-list input[type=text]:not(.k-input), .km-list select:not([multiple]), .km-list .k-dropdown-wrap, .km-list textarea {
+    color: #2e2e2e;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: rgba(46, 46, 46, 0.2);
+    background-color: white;
+    width: 70%;
+}
+
+.km-list input[type=color], .km-list input[type=week], .km-list input[type=date], .km-list input[type=time], .km-list input[type=month], .km-list input[type=datetime], .km-list input[type=datetime-local], .km-list .k-dropdown {
+    text-align: left;
+    color: #2e2e2e;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: rgba(46, 46, 46, 0.2);
+    background-color: white;
+    width: 70%;
+}
+
+
+.km-list .k-dropdown-wrap {
+    border: none;
+}
+
+.km-rowinsert, .km-state-active, .km-scroller-pull, .km-loader:before, .km-touch-scrollbar, .km-pages .km-current-page, .km-tabstrip .km-state-active, .km-scroller-refresh.km-load-more, .km-popup .k-state-hover, .km-popup .k-state-focused, .km-popup .k-state-selected, .km-actionsheet > li > a:active, .km-actionsheet > li > a:hover, li.km-state-active .km-listview-link, li.km-state-active .km-listview-label, .km-listview-label input[type=radio]:checked, .km-listview-label input[type=checkbox]:checked {
+    background: rgb(227, 227, 227);
+    color: black;
+}
+
+
+.km-list > li {
+    border: 0px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+    .km-list > li > #branchddl {
+        color: #2e2e2e;
+        border: 1px solid;
+        border-radius: 10px;
+        border-color: rgba(46, 46, 46, 0.2);
+        background-color: white;
+        width: 70%;
+    }
+
+.km-summary:before, .km-summary:after {
+    content: "\e09c";
+}
+
+.km-dscr:before, .km-dscr:after {
+    content: "\e0c5";
+}
+
+.km-mydrawer:before, .km-mydrawer:after {
+    content: "\e077";
+}
+
+#left-drawer .km-content {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+
+
+.main-wrapper-column {
+    float: left;
+    width: 33%;
+}
+
+.main-wrapper-column1 {
+    height: 250px;
+    padding-right: 4px;
+}
+
+
+.main-wrapper-column2 {
+    height: 250px;
+}
+
+.main-wrapper-column3 {
+    height: 250px;
+}
+
+.r-text {
+    color: #2e2e2e;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: rgba(46, 46, 46, 0.2);
+    background-color: white;
+    width: 100%;
+    height: 33.9375px;
+    font-size: 1.1rem;
+}
+
+#DSCRWindowExplanation {
+    width: 100% !important;
+    height: 50px;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: rgba(46, 46, 46, 0.2);
+}
+
+
+#details-wrapper {
+    height: 290px;
+}
+
+#main-wrapper {
+    height: 250px;
+}
+
+.WindowListItem {
+    color: blue !important;
+    font-size: 18px;
+
+}
+
+    .WindowListItem:hover {
+        background-color: blue;
+        color: white !important;
+        cursor: pointer;
+    }
+
+#DSCRWindow .label {
+    width: 180px;
+    float: left;
+    height: 30px;
+    font-size: larger;
+}
+
+#DSCRWindow .container {
+    margin-top: 10px;
+    border: 1px solid #c5c5c5;
+    height: 390px;
+    width: 380px;
+    clear: both;
+    padding: 4px;
+}
+
+#DSCRWindow .container-barcode {
+    height: 100px;
+}
+
+#DSCRWindow .text {
+    color: #2e2e2e;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: rgba(46, 46, 46, 0.2);
+    background-color: white;
+    height: 33.9375px;
+    font-size: 1.1rem;
+    width: 190px;
+    float: left;
+}
+
+.windowHeader {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: antiquewhite;
+    padding: 6px;
+}
