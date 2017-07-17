@@ -68,6 +68,8 @@ namespace HOORESTService
         public string trx_date_to { get; set; }
         [DataMember]
         public string trx_date_from { get; set; }
+        [DataMember]
+        public bool resultMessage { get; set; }
     }
 
     public class Detail
@@ -121,6 +123,7 @@ namespace HOORESTService
             List<Detail> details = new List<Detail>();
             string sql = string.Format("CALL `prod_syshoo_db`.`sp_dscr`('{0}', '{1}');", dscr.prefix, dscr.rr_number);
             DataTable data = m.Select(sql);
+            result.resultMessage = false;
             if (data.Rows.Count > 0)
             {
                 foreach (DataRow row in data.Rows)
@@ -144,12 +147,13 @@ namespace HOORESTService
                     result.trx_time_to = row["trx_time_to"].ToString();
                     result.cash = Convert.ToDecimal(row["cash"]);
                     result.ar_amount = Convert.ToDecimal(row["ar_amount"]);
-                    result.payment = Convert.ToDecimal(row["payment"]);                    
+                    result.payment = Convert.ToDecimal(row["payment"]);
                     if (row["Check"] == System.DBNull.Value)
                     {
                         result.totalchecks = 0;
                     }
-                    else {
+                    else
+                    {
                         result.totalchecks = Convert.ToDecimal(row["Check"]);
                     }
                     if (row["Card"] == System.DBNull.Value)
@@ -159,7 +163,10 @@ namespace HOORESTService
                     else
                     {
                         result.totalcreditcards = Convert.ToDecimal(row["Card"]);
-                    }                    
+                    }
+
+                    result.resultMessage = true;
+
                     Detail detail = new Detail
                     {
                         prefix = row["prefix"].ToString(),
@@ -182,7 +189,7 @@ namespace HOORESTService
                 result.details = details;
 
             }
-
+            
             //check
             sql = string.Format("CALL `prod_syshoo_db`.`sp_dscr_checks`('{0}');", fullRR);
             data = m.Select(sql);

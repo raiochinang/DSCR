@@ -6,7 +6,6 @@ $(document).ready(function () {
     var todayDate;
     var CheckWindowGridData = [];
     var CreditCardWindowGridData = [];
-    var barcodelength = 5; //11
 
     //DSCR
     var DSCR = new Object();
@@ -20,8 +19,13 @@ $(document).ready(function () {
     var creditcarddata = [];
     var MyDetails = [];
 
+
+    //Settings
     var API = "http://localhost:2518/HOOAPI.svc/";
     var PrintURL = "http://localhost:2518/Pages/MyInvoice.aspx?P=";
+    var barcodelength = 5; //11
+
+
     var methods = {
         init: function () {
             todayDate = kendo.toString(kendo.parseDate(new Date()), 'MM/dd/yyyy');
@@ -41,16 +45,31 @@ $(document).ready(function () {
                     methods.Print();
                 }
             });
+            $('#dscrDoctor').keyup(function (e) {
+                if (e.keyCode == 13 && $(this).val().length > 0) {
+                    methods.SearchDoctor();
+                }
+            });
             $("#btnDoctorSearch").kendoButton({
                 icon: "search",
                 click: function () {
                     methods.SearchDoctor();
                 }
             });
+            $('#dscrPAsst').keyup(function (e) {
+                if (e.keyCode == 13 && $(this).val().length > 0) {
+                    methods.SearchPAsst();
+                }
+            });
             $("#btnPAsstSearch").kendoButton({
                 icon: "search",
                 click: function () {
                     methods.SearchPAsst();
+                }
+            });
+            $('#dscrPatient').keyup(function (e) {
+                if (e.keyCode == 13 && $(this).val().length > 0) {
+                    methods.SearchPatient();
                 }
             });
             $("#btnPatientSearch").kendoButton({
@@ -94,11 +113,16 @@ $(document).ready(function () {
                     methods.AddCheck();
                 }
             });
+            $('#dscrRR').keyup(function (e) {
+                if (e.keyCode == 13 && $(this).val().length > 0) {
+                    methods.SearchDSCR();
+                }
+            });
             $("#btnRRSearch").kendoButton({
                 icon: "search",
                 click: function () {
-                    methods.SearchDSCR();
-                }
+
+                },
             });
             $("#btnRRSearchSummary").kendoButton({
                 icon: "search",
@@ -127,6 +151,11 @@ $(document).ready(function () {
                 decimals: 2,
                 value: 0,
                 spinners: false,
+            });
+            $('#dscrCashier').keyup(function (e) {
+                if (e.keyCode == 13 && $(this).val().length > 0) {
+                    methods.SearchCashier();
+                }
             });
             $("#btnCashierSearch").kendoButton({
                 icon: "search",
@@ -163,6 +192,9 @@ $(document).ready(function () {
                         },
                         width: "100%"
                     });
+                },
+                close: function () {
+                    $('#dscrDoctor').focus();
                 }
             });
             $('#NurseWindow').kendoWindow({
@@ -179,6 +211,9 @@ $(document).ready(function () {
                         },
                         width: "100%"
                     });
+                },
+                close: function () {
+                    $('#dscrPAsst').focus();
                 }
             });
             $('#PatientWindow').kendoWindow({
@@ -195,6 +230,9 @@ $(document).ready(function () {
                         },
                         width: "100%"
                     });
+                },
+                close: function () {
+                    $('#dscrPatient').focus();
                 }
             });
             $('#CheckWindow').kendoWindow({
@@ -234,7 +272,7 @@ $(document).ready(function () {
                             $('#CheckWindow').data("kendoWindow").close();
                         },
                     });
-                   
+
                 }
             });
             $('#CreditCardWindow').kendoWindow({
@@ -275,7 +313,7 @@ $(document).ready(function () {
                             $('#CreditCardWindow').data("kendoWindow").close();
                         },
                     });
-                   
+
                 }
             });
             $('#CashierWindow').kendoWindow({
@@ -292,6 +330,9 @@ $(document).ready(function () {
                         },
                         width: "100%"
                     });
+                },
+                close: function () {
+                    $('#dscrCashier').focus();
                 }
             });
             $("#DSCRWindowGross").kendoNumericTextBox({
@@ -377,7 +418,7 @@ $(document).ready(function () {
             $("#notification").kendoNotification({
                 position: {
                     pinned: true,
-                    top: 10,
+                    top: 6,
                     left: null,
                     bottom: null,
                     right: 10
@@ -441,17 +482,25 @@ $(document).ready(function () {
             if (name.length > 0) {
                 $.get(API + "doctor/" + name, function (data, status) {
                     var ds = [];
-                    $(data.DoctorsResult).each(function (k, v) {
-                        var item = { id: v.id, name: v.name };
+                    var template = kendo.template($("#NoRecordTemplate").html());
+                    if ($(data.DoctorsResult).length > 0) {
+                        $(data.DoctorsResult).each(function (k, v) {
+                            var item = { id: v.id, name: v.name };
+                            ds.push(item);
+                        });
+                        template = kendo.template($("#DoctorWindowListTemplate").html());
+                    }
+                    else {
+                        var item = { id: 0, name: "No Record" };
                         ds.push(item);
-                    });
+                    }
 
                     var dataSource = new kendo.data.DataSource({
                         data: ds
                     });
                     $("#DoctorWindowList").kendoListView({
                         dataSource: ds,
-                        template: kendo.template($("#DoctorWindowListTemplate").html()),
+                        template: template,
                         dataBound: function () {
                             $('#DoctorWindow').data("kendoWindow").center().open();
                             $('.DoctorWindowListItem').off("click").on("click", function () {
@@ -471,17 +520,26 @@ $(document).ready(function () {
             if (name.length > 0) {
                 $.get(API + "nurse/" + name, function (data, status) {
                     var ds = [];
-                    $(data.NurseListResult).each(function (k, v) {
-                        var item = { id: v.id, name: v.name };
+                    var template = kendo.template($("#NoRecordTemplate").html());
+                    if ($(data.NurseListResult).length > 0) {
+                        $(data.NurseListResult).each(function (k, v) {
+                            var item = { id: v.id, name: v.name };
+                            ds.push(item);
+                        });
+                        template = kendo.template($("#NurseWindowListTemplate").html());
+                    }
+                    else {
+                        var item = { id: 0, name: "No Record" };
                         ds.push(item);
-                    });
+                    }
 
                     var dataSource = new kendo.data.DataSource({
                         data: ds
                     });
+
                     $("#NurseWindowList").kendoListView({
                         dataSource: ds,
-                        template: kendo.template($("#NurseWindowListTemplate").html()),
+                        template: template,
                         dataBound: function () {
                             $('#NurseWindow').data("kendoWindow").center().open();
                             $('.NurseWindowListItem').off("click").on("click", function () {
@@ -500,17 +558,26 @@ $(document).ready(function () {
             if (name.length > 0) {
                 $.get(API + "patient/" + name, function (data, status) {
                     var ds = [];
-                    $(data.PatientListResult).each(function (k, v) {
-                        var item = { id: v.id, name: v.name };
+                    var template = kendo.template($("#NoRecordTemplate").html());
+                    if ($(data.PatientListResult).length > 0) {
+                        $(data.PatientListResult).each(function (k, v) {
+                            var item = { id: v.id, name: v.name };
+                            ds.push(item);
+                        });
+
+                        template = kendo.template($("#PatientWindowListTemplate").html());
+                    }
+                    else {
+                        var item = { id: 0, name: "No Record" };
                         ds.push(item);
-                    });
+                    }
 
                     var dataSource = new kendo.data.DataSource({
                         data: ds
                     });
                     $("#PatientWindowList").kendoListView({
                         dataSource: ds,
-                        template: kendo.template($("#PatientWindowListTemplate").html()),
+                        template: template,
                         dataBound: function () {
                             $('#PatientWindow').data("kendoWindow").center().open();
                             $('.PatientWindowListItem').off("click").on("click", function () {
@@ -548,10 +615,17 @@ $(document).ready(function () {
             if (name.length > 0) {
                 $.get(API + "Cashier/" + name, function (data, status) {
                     var ds = [];
-                    $(data.CashierListResult).each(function (k, v) {
-                        var item = { id: v.id, name: v.name };
+                    var template = kendo.template($("#NoRecordTemplate").html());
+                    if ($(data.CashierListResult).length > 0) {
+                        $(data.CashierListResult).each(function (k, v) {
+                            var item = { id: v.id, name: v.name };
+                            ds.push(item);
+                        });
+                    }
+                    else {
+                        var item = { id: 0, name: "No Record" };
                         ds.push(item);
-                    });
+                    }
 
                     var dataSource = new kendo.data.DataSource({
                         data: ds
@@ -1161,7 +1235,7 @@ $(document).ready(function () {
         },
         ComputeAR: function () {
             var Total = $('#TotalGrid').text().replace(',', '');
-           
+
             var cash = $('#dscrCash').data('kendoNumericTextBox').value();
             if (cash == null) {
                 cash = 0;
@@ -1180,7 +1254,7 @@ $(document).ready(function () {
             }
             else {
                 creditcard = creditcard.replace(',', '');
-            }            
+            }
             var minus = parseFloat(cash) + parseFloat(check) + parseFloat(creditcard);
             var result = parseFloat(Total) - minus;
             $('#dscrTotalPayment').data('kendoNumericTextBox').value(minus);
@@ -1298,7 +1372,7 @@ $(document).ready(function () {
             $("#notification").data("kendoNotification").show('DSCR is saved successfully.', "success");
         },
         SearchDSCR: function (data) {
-            if (data) {
+            if (data.resultMessage == true) {
                 var trx_date = kendo.toString(kendo.parseDate(data.trx_date), 'MM/dd/yyyy');
                 $('#dscrDate').data('kendoDatePicker').value(trx_date);
                 $('#dscrTimeFrom').data('kendoTimePicker').value(data.trx_time_from);
@@ -1360,8 +1434,10 @@ $(document).ready(function () {
                 });
                 methods.BindCreditCardGrid();
             }
-
-
+            else {
+                methods.Cancel();
+                $("#notification").data("kendoNotification").show('No DSCR found. Search again', "error");
+            }
         },
         RRSearchSummary: function (data) {
             var ds = [];

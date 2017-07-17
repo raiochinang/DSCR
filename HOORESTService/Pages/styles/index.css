@@ -112,7 +112,6 @@
 .WindowListItem {
     color: blue !important;
     font-size: 18px;
-
 }
 
     .WindowListItem:hover {
@@ -120,6 +119,11 @@
         color: white !important;
         cursor: pointer;
     }
+
+.NoRecord {
+    color: blue !important;
+    font-size: 18px;
+}
 
 #DSCRWindow .label {
     width: 180px;
