@@ -114,5 +114,11 @@ namespace HOORESTService
         {
             return Persons.Instance.UpdateUser(person);
         }
+
+
+        public bool mdshare(DSCR param)
+        {
+            return DSCRs.Instance.MDShare(param);
+        }
     }
 }

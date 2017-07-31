@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MyInvoice.aspx.cs" Inherits="HOOReport.MyInvoice" %>
 
-<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
 <!DOCTYPE html>
 
@@ -12,7 +12,7 @@
     <form id="form1" runat="server">
         <iframe id="frmPrint" name="IframeName" width="1200" height="500" runat="server" style="display: none" runat="server"></iframe>
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-        <div style="visibility:hidden">            
+        <div>            
             <rsweb:ReportViewer ID="ReportViewer1" runat="server" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Height="464px" Width="767px">
                 <LocalReport ReportPath="Report1.rdlc">
                     <DataSources>

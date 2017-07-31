@@ -9,21 +9,27 @@ $(document).ready(function () {
 
     //DSCR
     var DSCR = new Object();
+    var data_gross = 0;
     var doctor_id = 0,
         nurse_id = 0,
         patient_id = 0,
         cashier_id = 0,
         branch_id = 0,
-        current_user_id = 0;
+        current_user_id = 0,
+        current_particular_id = 0;
     var checkdata = [];
     var creditcarddata = [];
     var MyDetails = [];
 
 
     //Settings
+    //server
+    //var API = "http://119.93.105.48:83/HOOAPI.svc/";
+    //var PrintURL = "http://119.93.105.48:83/Pages/MyInvoice.aspx?P=";
+    //local
     var API = "http://localhost:2518/HOOAPI.svc/";
     var PrintURL = "http://localhost:2518/Pages/MyInvoice.aspx?P=";
-    var barcodelength = 5; //11
+    var barcodelength = 11;
 
 
     var methods = {
@@ -38,6 +44,11 @@ $(document).ready(function () {
             $('.btnSave').kendoButton({
                 click: function () {
                     methods.Save();
+                }
+            });
+            $('.btnMDShareGenerate').kendoButton({
+                click: function () {
+                    methods.MDShare();
                 }
             });
             $('.btnPrint').kendoButton({
@@ -82,6 +93,17 @@ $(document).ready(function () {
                 animation: false,
                 value: todayDate
             });
+
+            $("#MDSHAREDateFrom").kendoDatePicker({
+                animation: false,
+                value: todayDate
+            });
+
+            $("#MDSHAREDateTo").kendoDatePicker({
+                animation: false,
+                value: todayDate
+            });
+
             $("#dscrFromSearch").kendoDatePicker({
                 animation: false,
                 value: todayDate,
@@ -121,7 +143,7 @@ $(document).ready(function () {
             $("#btnRRSearch").kendoButton({
                 icon: "search",
                 click: function () {
-
+                    methods.SearchDSCR();
                 },
             });
             $("#btnRRSearchSummary").kendoButton({
@@ -346,8 +368,7 @@ $(document).ready(function () {
                 change: function () {
                     var value = this.value();
                     $("#DSCRWindowSession").data('kendoNumericTextBox').value(0);
-                    var gross = $('#particularName').data('gross');
-                    var TotalGross = parseFloat(gross) * value;
+                    var TotalGross = parseFloat(data_gross) * value;
                     $("#DSCRWindowGross").data('kendoNumericTextBox').value(TotalGross);
                     methods.ComputeNetSale();
                 }
@@ -359,8 +380,7 @@ $(document).ready(function () {
                 change: function () {
                     var value = this.value();
                     $("#DSCRWindowQty").data('kendoNumericTextBox').value(0);
-                    var gross = $('#particularName').data('gross');
-                    var TotalGross = parseFloat(gross) * value;
+                    var TotalGross = parseFloat(data_gross) * value;
                     $("#DSCRWindowGross").data('kendoNumericTextBox').value(TotalGross);
                     methods.ComputeNetSale();
                 }
@@ -430,7 +450,7 @@ $(document).ready(function () {
             });
             $('#Barcode').on('input', function () {
                 if ($('#Barcode').val().length > barcodelength) {
-                    methods.Barcode();
+                    setTimeout(methods.Barcode(), 1500);
                 }
             });
             methods.BindGrid();
@@ -447,12 +467,23 @@ $(document).ready(function () {
                     dataSource: ds,
                     enable: false,
                 });
+
+                $('#MDSHAREBranch').kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    dataSource: ds,
+                    enable: true,
+                    width: 400
+                });
+
+
                 methods.Styles();
 
             });
             $('#LoginWindow').data("kendoWindow").center().open();
             methods.BindCheckGrid();
             methods.BindCreditCardGrid();
+
         },
         Styles: function () {
             $("#dscrDate").css({
@@ -465,6 +496,15 @@ $(document).ready(function () {
                 'left': '2px',
             });
             $("#dscrTimeTo").css({
+                'width': '90%',
+                'left': '2px',
+            });
+
+            $("#MDSHAREDateFrom").css({
+                'width': '90%',
+                'left': '2px',
+            });
+            $("#MDSHAREDateTo").css({
                 'width': '90%',
                 'left': '2px',
             });
@@ -707,10 +747,7 @@ $(document).ready(function () {
                     },
                     { command: [{ name: "destroy", text: "", width: 30 }], title: " " },
                 ],
-                editable: {
-                    mode: "incell", // mode can be incell/inline/popup with Q1 '12 Beta Release of Kendo UI
-                    confirmation: false // the confirmation message for destroy command
-                },
+                editable: false,
                 scrollable: true,
                 sortable: false,
                 pageable: false,
@@ -991,8 +1028,9 @@ $(document).ready(function () {
                         explanation: v.explanation
                     });
                 });
+
                 MyDetails.push({
-                    item_id: $('#particularName').data('id'),
+                    item_id: current_particular_id,
                     item_name: $('#particularName').text(),
                     quantity: $('#DSCRWindowQty').data('kendoNumericTextBox').value(),
                     session: $('#DSCRWindowSession').data('kendoNumericTextBox').value(),
@@ -1021,8 +1059,8 @@ $(document).ready(function () {
             $('#DSCRWindowAddOns').data('kendoNumericTextBox').value(0);
             $('#DSCRWindowNetSale').data('kendoNumericTextBox').value(0);
             $('#DSCRWindowExplanation').val('');
-            $('#particularName').attr('data-gross', 0);
-            $('#particularName').attr('data-gross', 0);
+            data_gross = 0;
+
             $('#particularName').text('');
             $('#Barcode').val('');
         },
@@ -1031,15 +1069,15 @@ $(document).ready(function () {
             $.get(API + "Particulars/" + barcode, function (data, status) {
                 if (data.SearchParticularsResult.length == 0) {
                     $('#particularName').text('');
-                    $('#particularName').attr('data-id', 0);
-                    $('#particularName').attr('data-gross', 0);
+                    current_particular_id = 0;
+                    data_gross = 0;
                     $("#DSCRWindowGross").data("kendoNumericTextBox").value(0);
                 }
                 else {
                     $(data.SearchParticularsResult).each(function (k, v) {
                         $('#particularName').text(v.Name);
-                        $('#particularName').attr('data-id', v.Id);
-                        $('#particularName').attr('data-gross', v.Gross);
+                        current_particular_id = v.Id;
+                        data_gross = v.Gross;
                         $("#DSCRWindowGross").data("kendoNumericTextBox").value(v.Gross);
                     });
                 }
@@ -1304,7 +1342,7 @@ $(document).ready(function () {
 
             var grid = $("#adminGrid").kendoGrid({
                 dataSource: dataSource,
-                height: 215,
+                height: 580,
                 toolbar: ["save", "cancel"],
                 editable: true,
                 columns: [
@@ -1319,6 +1357,26 @@ $(document).ready(function () {
             //    callback.adminGrid(data);
             //});
         },
+        MDShare: function () {
+            var from = kendo.toString($("#MDSHAREDateFrom").data('kendoDatePicker').value(), "u");
+            var to = kendo.toString($("#MDSHAREDateTo").data('kendoDatePicker').value(), "u");
+            var branch = $('#MDSHAREBranch').data("kendoDropDownList").value();
+            var branchName = $('#MDSHAREBranch').data("kendoDropDownList").text();
+            from = from.substring(0, 10) + " 00:00:00";
+            to = to.substring(0, 10) + " 23:59:59";
+
+            DSCR = new Object();
+            DSCR = {
+                trx_date_to: to,
+                trx_date_from: from,
+                branch_id: parseInt(branch),
+                branch_name: branchName
+            }
+            url = API + "MDShare/";
+            service.post(url, JSON.stringify(DSCR), function () {
+
+            });
+        }
     }
 
     var service = {
@@ -1441,7 +1499,6 @@ $(document).ready(function () {
         },
         RRSearchSummary: function (data) {
             var ds = [];
-            debugger;
             $(data.details).each(function (k, v) {
                 var item = {
                     Prefix: v.prefix,
@@ -1466,7 +1523,7 @@ $(document).ready(function () {
                 dataSource: ds,
                 scrollable: true,
                 navigatable: true,
-                height: 215,
+                height: 490,
                 navigatable: true,
                 columns: [
                             { field: "Prefix" },
@@ -1530,4 +1587,5 @@ $(document).ready(function () {
 
 
     methods.init();
+
 });

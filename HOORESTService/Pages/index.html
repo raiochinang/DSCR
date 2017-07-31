@@ -11,7 +11,7 @@
     <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
     <link href="~/../styles/index.css?v=1" rel="stylesheet" />
 
-   
+
 
 
     <script src="~/../kendo/js/jquery.min.js"></script>
@@ -24,7 +24,7 @@
 <body>
 
     <!--drawer-->
-    <div data-role="drawer" id="left-drawer" style="width: 20em;" data-title="Menu" data-views="['dscr', 'summary', 'admin']" data-use-native-scrolling="true">
+    <div data-role="drawer" id="left-drawer" style="width: 20em;" data-title="Menu" data-views="['dscr', 'summary', 'admin', 'mdshare']" data-use-native-scrolling="true">
         <header data-role="header">
             <div data-role="navbar">
                 <span data-role="view-title"></span>
@@ -45,6 +45,11 @@
             <li data-icon="contacts" id="UserMaintenanceList">
                 <a href="#admin">
                     User Maintenance
+                </a>
+            </li>
+            <li data-icon="contacts" id="mdshare">
+                <a href="#mdshare">
+                    MD Share
                 </a>
             </li>
             <li data-icon="logout">
@@ -205,7 +210,37 @@
 
         </div>
     </div>
+    <div data-role="view" id="mdshare" data-title="MDShare" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content">
+            <div style="width: 500px;">
+                <ul data-role="listview">
+                    <li>
+                        <label>Branch:</label>
+                        <input type="text" id="MDSHAREBranch" />
+                    </li>
+                    <li>
+                        <label>From:</label>
+                        <input type="text" id="MDSHAREDateFrom" style="position: absolute;right: 9px;top: 3px;width: 68%;" />
+                    </li>
+                    <li>
+                        <label>To:</label>
+                        <input type="text" id="MDSHAREDateTo" style="position: absolute;right: 9px;top: 3px;width: 68%;" />
+                    </li>
+                    <li style="height: 80px;">
+                        <button class="btnMDShareGenerate" data-align="center" style="position:absolute; right: 10px;">GENERATE</button>
+                    </li>
+                </ul>
+            </div>
 
+
+        </div>
+    </div>
 
     <!--window-->
     <div id="LoginWindow">
@@ -216,7 +251,7 @@
             <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="mjagapinan" />
         </div>
         <div>
-            <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="password12" />
+            <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="mjagapinan" />
         </div>
         <div>
             <button class="btnLogin" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">LOG IN</button>
@@ -272,7 +307,7 @@
         <div class="container-barcode">
             <div class="label">Barcode:</div>
             <input type="text" class="text" id="Barcode" />
-            <div id="particularName"></div>
+            <div id="particularName" data-gross="0"></div>
         </div>
         <div class="container">
             <div class="label">Gross:</div>

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Web;
+using Microsoft.Office.Interop;
+using Microsoft.Office.Interop.Excel;
 
 namespace HOORESTService
 {
@@ -108,6 +110,7 @@ namespace HOORESTService
 
     public partial class DSCRs
     {
+        private int rowCount = 0;
         private static readonly DSCRs _instance = new DSCRs();
         private DSCRs() { }
         public static DSCRs Instance
@@ -122,7 +125,7 @@ namespace HOORESTService
             string fullRR = dscr.prefix + "-" + dscr.rr_number;
             List<Detail> details = new List<Detail>();
             string sql = string.Format("CALL `prod_syshoo_db`.`sp_dscr`('{0}', '{1}');", dscr.prefix, dscr.rr_number);
-            DataTable data = m.Select(sql);
+            System.Data.DataTable data = m.Select(sql);
             result.resultMessage = false;
             if (data.Rows.Count > 0)
             {
@@ -189,7 +192,7 @@ namespace HOORESTService
                 result.details = details;
 
             }
-            
+
             //check
             sql = string.Format("CALL `prod_syshoo_db`.`sp_dscr_checks`('{0}');", fullRR);
             data = m.Select(sql);
@@ -239,7 +242,7 @@ namespace HOORESTService
             List<Detail> details = new List<Detail>();
             string sql = string.Format("CALL `prod_syshoo_db`.`sp_dscr_by_date_range`('{0}', '{1}');", dscr.trx_date_from, dscr.trx_date_to);
 
-            DataTable data = m.Select(sql);
+            System.Data.DataTable data = m.Select(sql);
             if (data.Rows.Count > 0)
             {
                 foreach (DataRow row in data.Rows)
@@ -298,7 +301,7 @@ namespace HOORESTService
             MySQL m = new MySQL();
             List<Detail> details = new List<Detail>();
             string sql = string.Format("select * from prod_syshoo_db.dscr_details where rr_number = '{0}';", rr_number);
-            DataTable data = m.Select(sql);
+            System.Data.DataTable data = m.Select(sql);
             foreach (DataRow row in data.Rows)
             {
                 Detail item = new Detail
@@ -418,6 +421,115 @@ namespace HOORESTService
             //insert new dscr
             Insert(dscr);
             return dscr;
+        }
+
+        public bool MDShare(DSCR param)
+        {
+            MySQL m = new MySQL();
+            int branch_id = param.branch_id;
+            string datefrom = param.trx_date_from;
+            string dateto = param.trx_date_to;
+            string branch_name = param.branch_name;
+            string sql = string.Format("CALL `prod_syshoo_db`.`sp_mdshare`({0}, '{1}', '{2}');", branch_id, datefrom, dateto);
+
+            System.Data.DataTable data = m.Select(sql);
+            var Doctors = data.AsEnumerable().Select(r => new
+            {
+                doctor_id = r.Field<int>("doctor_id"),
+                doctor_name = r.Field<string>("doctor_name")
+            }).Distinct();
+
+
+            Application xlApp = new Application();
+            Workbook wb = xlApp.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
+            foreach (var item in Doctors)
+            {
+                wb.Worksheets.Add();
+            }
+
+            int doctorIdx = 1;
+            foreach (var item in Doctors)
+            {
+                rowCount = 7;
+                Worksheet ws = (Worksheet)wb.Worksheets[doctorIdx];
+                var dr_name = item.doctor_name;
+                if (dr_name.Length > 30)
+                {
+                    ws.Name = item.doctor_name.Substring(0, 29);
+                }
+                else
+                {
+                    ws.Name = item.doctor_name;
+                }
+                ws.Select();
+                OBAGI(ws, data);
+                ExcelColumn(ws, ws.Name, branch_name);
+                doctorIdx += 1;
+
+                ws.Columns.EntireColumn.AutoFit();
+            }
+
+
+
+            xlApp.Visible = true;
+            xlApp.UserControl = true;
+
+
+
+            // Release object references.      
+
+            wb = null;
+            //xlApp.Quit();
+            xlApp = null;
+
+            return true;
+        }
+
+        private void ExcelColumn(Worksheet ws, string DoctorName, string BranchName)
+        {
+            ws.Range["A1"].Value = "DAILY SALES AND COLLECTIONS REPORT";
+            ws.Range["A1", "F1"].Merge();
+            ws.Range["A4"].Value = DoctorName;
+            ws.Range["A4", "F4"].Merge();
+            ws.Range["A6"].Value = "DATE";
+            ws.Range["B6"].Value = "RR#";
+            ws.Range["C6"].Value = "SI#";
+            ws.Range["D6"].Value = "OR#";
+            ws.Range["E6"].Value = "PATIENT NAME";
+            ws.Range["F6"].Value = "EXPLANATION";
+            ws.Range["G6"].Value = "PARTICULARS";
+            ws.Range["H6"].Value = "QUANTITY";
+            ws.Range["I6"].Value = "SESSION";
+            ws.Range["J6"].Value = "PATIENT PRICE";
+            ws.Range["K6"].Value = "MD PRICE";
+            ws.Range["L6"].Value = "GROSS PROFIT";
+            ws.Range["M6"].Value = "AMOUNT FOR SHARING";
+            ws.Range["N6"].Value = "MD SHARE 60%";
+            ws.Range["A6", "N6"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightBlue);
+            ws.Range["A6", "N6"].Font.Bold = true;
+            ws.Range["A2"].Value = BranchName;
+            ws.Range["A2", "F2"].Merge();
+        }
+        private void OBAGI(Worksheet ws, System.Data.DataTable dt)
+        {
+            ws.Cells[rowCount, 1] = "OBAGI";
+            rowCount += 1;
+            
+            foreach (DataRow row in dt.Rows)
+            {
+                string petsa = row["trx_date"].ToString();
+                string Prefix = row["prefix"].ToString();
+                string rr_number = row["rr_number"].ToString();
+                string si_number = row["si_number"].ToString();
+                string or_number = row["or_number"].ToString();
+                string patient = row["patient_name"].ToString();
+                ws.Cells[rowCount, 1] = petsa.Replace("00:00:00", "");
+                ws.Cells[rowCount, 2] = Prefix + "-" + rr_number;
+                ws.Cells[rowCount, 3] = si_number;
+                ws.Cells[rowCount, 4] = or_number;
+                ws.Cells[rowCount, 5] = patient;
+                rowCount += 1;
+            }
         }
     }
 }

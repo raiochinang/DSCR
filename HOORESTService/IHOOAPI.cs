@@ -151,5 +151,13 @@ namespace HOORESTService
         List<User> UserSave(User user);
         #endregion Users
 
+        #region "Generator"
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "MDShare/")]
+        bool mdshare(DSCR param);
+        #endregion
     }
 }
