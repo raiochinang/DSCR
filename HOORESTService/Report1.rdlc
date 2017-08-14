@@ -541,7 +541,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Sum(Fields!Card.Value, "DataSet1")</Value>
+                  <Value>=Sum(Fields!cash.Value, "DataSet1")</Value>
                   <Style />
                 </TextRun>
               </TextRuns>

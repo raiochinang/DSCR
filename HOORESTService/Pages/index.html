@@ -17,7 +17,7 @@
     <script src="~/../kendo/js/jquery.min.js"></script>
     <!--<script src="~/../scripts/bootstrap.js"></script>-->
     <script src="~/../kendo/js/kendo.all.min.js"></script>
-    <script src="~/../scripts/index.js?v=5"></script>
+    <script src="~/../scripts/index.js?v=6"></script>
 
 
 </head>
@@ -77,16 +77,16 @@
                         </li>
                         <li>
                             <label>RR:</label>
-                            <input type="text" id="dscrRR" style="right: 10%;width: 60%;" required />
+                            <input type="text" id="dscrRR" style="right: 10%;width: 60%; text-transform: uppercase" required />
                             <button id="btnRRSearch" style="position: absolute;right: 10px; height: 70%;"></button>
                         </li>
                         <li>
                             <label>SI:</label>
-                            <input type="text" id="dscrSI" />
+                            <input type="text" id="dscrSI" style="text-transform: uppercase" />
                         </li>
                         <li>
                             <label>OR:</label>
-                            <input type="text" id="dscrOR" />
+                            <input type="text" id="dscrOR" style="text-transform: uppercase" />
                         </li>
                         <li>
                             <label>Branch:</label>
@@ -163,8 +163,7 @@
         </div>
         <footer data-role="footer">
             <div data-role="navbar">
-                <span data-align="left" id="currentUserBranch">User/Branch</span>
-                <button class="btnPrint" data-align="right">PRINT</button>
+                <span data-align="left" id="currentUserBranch">User/Branch</span>                
                 <button class="btnSave" data-align="right">SAVE</button>
                 <button class="btnCancel" data-align="right">RESET</button>
             </div>
@@ -232,8 +231,11 @@
                         <label>To:</label>
                         <input type="text" id="MDSHAREDateTo" style="position: absolute;right: 9px;top: 3px;width: 68%;" />
                     </li>
-                    <li style="height: 80px;">
-                        <button class="btnMDShareGenerate" data-align="center" style="position:absolute; right: 10px;">GENERATE</button>
+                    <li style="height: 30px;">
+                        <button class="btnMDShareGenerate" data-align="center" style="position:absolute; right: 10px;">GENERATE MDSHARE</button>
+                    </li>
+                    <li style="height: 30px;">
+                        <button class="btnSalePerBranchGenerate" data-align="center" style="position:absolute; right: 10px;">GENERATE SALES PER BRANCH</button>
                     </li>
                 </ul>
             </div>
@@ -248,10 +250,10 @@
             Login
         </div>
         <div>
-            <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="mjagapinan" />
+            <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="" />
         </div>
         <div>
-            <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="mjagapinan" />
+            <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="" />
         </div>
         <div>
             <button class="btnLogin" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">LOG IN</button>
@@ -306,8 +308,8 @@
     <div id="DSCRWindow">
         <div class="container-barcode">
             <div class="label">Barcode:</div>
-            <input type="text" class="text" id="Barcode" />
-            <div id="particularName" data-gross="0"></div>
+            <input type="text" class="text" id="Barcode" style="text-transform: uppercase" />
+            <div id="particularName" data-gross="0" style="text-transform: uppercase"></div>
         </div>
         <div class="container">
             <div class="label">Gross:</div>
@@ -329,7 +331,7 @@
             <div class="label">Net Sale:</div>
             <input type="text" class="DSCRWindowDecimal" id="DSCRWindowNetSale" style="text-align: right;" disabled />
             <div class="label">Explanation:</div>
-            <textarea id="DSCRWindowExplanation" style="height:40px"></textarea>
+            <textarea id="DSCRWindowExplanation" style="height:40px; text-transform: uppercase"></textarea>
         </div>
         <button id="btnDSCRWindowPost" data-align="center" style="position:absolute; bottom: 4px; right: 80px;">POST</button>
         <button id="btnDSCRWindowClose" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">CLOSE</button>
@@ -358,6 +360,6 @@
     </script>
     <span id="notification">
         SAVE
-    </span>
+    </span>    
 </body>
 </html>

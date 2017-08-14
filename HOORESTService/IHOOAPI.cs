@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace HOORESTService
 {
@@ -157,7 +160,15 @@ namespace HOORESTService
                              RequestFormat = WebMessageFormat.Json,
                              BodyStyle = WebMessageBodyStyle.Bare,
                              UriTemplate = "MDShare/")]
-        bool mdshare(DSCR param);
+        string mdshare(DSCR param);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "SalesPerBranch/")]
+        string SalesPerBranch(DSCR param);
+        
         #endregion
     }
 }

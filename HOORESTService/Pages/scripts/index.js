@@ -15,6 +15,7 @@ $(document).ready(function () {
         patient_id = 0,
         cashier_id = 0,
         branch_id = 0,
+        branch_code,
         current_user_id = 0,
         current_particular_id = 0;
     var checkdata = [];
@@ -23,13 +24,11 @@ $(document).ready(function () {
 
 
     //Settings
-    //server
-    //var API = "http://119.93.105.48:83/HOOAPI.svc/";
-    //var PrintURL = "http://119.93.105.48:83/Pages/MyInvoice.aspx?P=";
-    //local
-    var API = "http://localhost:2518/HOOAPI.svc/";
-    var PrintURL = "http://localhost:2518/Pages/MyInvoice.aspx?P=";
     var barcodelength = 11;
+    var API = "http://119.93.105.48:83/HOOAPI.svc/";
+    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+        API = "http://localhost:2518/HOOAPI.svc/";
+    }
 
 
     var methods = {
@@ -49,6 +48,11 @@ $(document).ready(function () {
             $('.btnMDShareGenerate').kendoButton({
                 click: function () {
                     methods.MDShare();
+                }
+            });
+            $('.btnSalePerBranchGenerate').kendoButton({
+                click: function () {
+                    methods.SalesPerBranch();
                 }
             });
             $('.btnPrint').kendoButton({
@@ -92,6 +96,16 @@ $(document).ready(function () {
             $("#dscrDate").kendoDatePicker({
                 animation: false,
                 value: todayDate
+            });
+
+            $("#MDSHAREFolder").kendoUpload({
+                directory: true,
+                select: function (e) {
+                    debugger;
+                },
+                validation: {
+                    allowedExtensions: [".xls"],
+                }
             });
 
             $("#MDSHAREDateFrom").kendoDatePicker({
@@ -158,7 +172,6 @@ $(document).ready(function () {
                     methods.DateRangeSearchSummary();
                 }
             });
-
             $("#dscrAR").kendoNumericTextBox({
                 decimals: 2,
                 spinners: false,
@@ -466,6 +479,13 @@ $(document).ready(function () {
                     dataValueField: "value",
                     dataSource: ds,
                     enable: false,
+                    change: function (e) {
+                        var value = this.value();
+                        var result = methods.getBranchCode(value);
+                        $('#dscrPrefix').val(result);
+                        $('#dscrPrefix').val(result);
+                        $('#dscrPrefixSearch').val(result);
+                    }
                 });
 
                 $('#MDSHAREBranch').kendoDropDownList({
@@ -1182,16 +1202,6 @@ $(document).ready(function () {
             MyDetails = [];
             methods.BindGrid();
         },
-        Print: function () {
-            var win = window.open(PrintURL + "TRNMA-" + $('#dscrRR').val() + "&pref=" + $('#dscrPrefix').val(), '_blank');
-            if (win) {
-                //Browser has allowed it to be opened
-                win.focus();
-            } else {
-                //Browser has blocked it
-                alert('Please allow popups for this website');
-            }
-        },
         RRSearchSummary: function () {
             var fullRR = $("#dscrRR").val() + "-" + $("#dscrPrefix").val();
             DSCR = new Object();
@@ -1357,6 +1367,44 @@ $(document).ready(function () {
             //    callback.adminGrid(data);
             //});
         },
+        getBranchCode: function (id) {
+            var result = "";
+            switch (id) {
+                case "1":
+                    result = "831";
+                    break;
+                case "2":
+                    result = "ATC";
+                    break;
+                case "3":
+                    result = "ERMTA";
+                    break;
+                case "4":
+                    result = "FSTVL";
+                    break;
+                case "5":
+                    result = "GLRIA";
+                    break;
+                case "6":
+                    result = "GB5";
+                    break;
+                case "7":
+                    result = "SMBCR";
+                    break;
+                case "8":
+                    result = "SMNRT";
+                    break;
+                case "9":
+                    result = "SMPMPNG";
+                    break;
+                case "10":
+                    result = "TRNMA";
+                    break;
+                default:
+                    result = "";
+            }
+            return result;
+        },
         MDShare: function () {
             var from = kendo.toString($("#MDSHAREDateFrom").data('kendoDatePicker').value(), "u");
             var to = kendo.toString($("#MDSHAREDateTo").data('kendoDatePicker').value(), "u");
@@ -1373,10 +1421,30 @@ $(document).ready(function () {
                 branch_name: branchName
             }
             url = API + "MDShare/";
-            service.post(url, JSON.stringify(DSCR), function () {
-
+            service.post(url, JSON.stringify(DSCR), function (data) {
+                $("#notification").data("kendoNotification").show("Downloaded at " + data, "success");
             });
-        }
+        },
+        SalesPerBranch: function () {
+            var from = kendo.toString($("#MDSHAREDateFrom").data('kendoDatePicker').value(), "u");
+            var to = kendo.toString($("#MDSHAREDateTo").data('kendoDatePicker').value(), "u");
+            var branch = $('#MDSHAREBranch').data("kendoDropDownList").value();
+            var branchName = $('#MDSHAREBranch').data("kendoDropDownList").text();
+            from = from.substring(0, 10) + " 00:00:00";
+            to = to.substring(0, 10) + " 23:59:59";
+
+            DSCR = new Object();
+            DSCR = {
+                trx_date_to: to,
+                trx_date_from: from,
+                branch_id: parseInt(branch),
+                branch_name: branchName
+            }
+            url = API + "SalesPerBranch/";
+            service.post(url, JSON.stringify(DSCR), function (data) {
+                $("#notification").data("kendoNotification").show("Downloaded at " + data, "success");
+            });
+        },        
     }
 
     var service = {
@@ -1403,9 +1471,9 @@ $(document).ready(function () {
     var callback = {
         Login: function (data) {
             if (data.username != null) {
-                var code = data.branch.store_code_fld;
+                var code = methods.getBranchCode(data.branch.id.toString());
                 branch_id = data.branch.id;
-                current_user_id = data.id
+                current_user_id = data.id;
                 $('#branchddl').data("kendoDropDownList").value(branch_id);
                 $('#dscrPrefix').val(code);
                 $('#dscrPrefixSearch').val(code);
@@ -1419,6 +1487,8 @@ $(document).ready(function () {
                 }
                 else {
                     methods.adminGrid();
+                    $('#branchddl').data('kendoDropDownList').enable(true);
+
                 }
 
 
@@ -1579,13 +1649,20 @@ $(document).ready(function () {
             }).data("kendoGrid");
         },
         adminGrid: function (data) {
-            debugger;
-
 
         }
     }
 
 
     methods.init();
+
+    function selectFolder(e) {
+        var theFiles = e.target.files;
+        debugger;
+        var relativePath = theFiles[0].webkitRelativePath;
+        var folder = relativePath.split("/");
+        
+        alert(folder[0]);
+    }
 
 });

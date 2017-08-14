@@ -1,11 +1,9 @@
 ﻿$(document).ready(function () {
-    //Settings
-    //server
-    //var API = "http://119.93.105.48:83/HOOAPI.svc/";
-    //var PrintURL = "http://119.93.105.48:83/Pages/MyInvoice.aspx?P=";
-    //local
-    var API = "http://localhost:2518/HOOAPI.svc/";
-    var PrintURL = "http://localhost:2518/Pages/MyInvoice.aspx?P=";
+    var API = "http://119.93.105.48:83/HOOAPI.svc/";    
+    if (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    {
+        API = "http://localhost:2518/HOOAPI.svc/";
+    } 
     var barcodelength = 11;
 
     var methods = {

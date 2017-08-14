@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace HOORESTService
 {
@@ -116,9 +121,15 @@ namespace HOORESTService
         }
 
 
-        public bool mdshare(DSCR param)
+        public string mdshare(DSCR param)
         {
             return DSCRs.Instance.MDShare(param);
         }
+
+        public string SalesPerBranch(DSCR param)
+        {
+            return DSCRs.Instance.SalesReportPerBranch(param);
+        }
+               
     }
 }

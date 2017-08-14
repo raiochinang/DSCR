@@ -43,7 +43,7 @@
                 Login
             </div>
             <div>
-                <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="mjagapinan" />
+                <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="" />
             </div>
             <div>
                 <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="password12" />

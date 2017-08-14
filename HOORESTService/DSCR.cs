@@ -5,8 +5,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Web;
-using Microsoft.Office.Interop;
-using Microsoft.Office.Interop.Excel;
+using System.IO;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
+using Spire.Xls;
 
 namespace HOORESTService
 {
@@ -26,6 +29,8 @@ namespace HOORESTService
         public int branch_id { get; set; }
         [DataMember]
         public string branch_name { get; set; }
+        [DataMember]
+        public string branch_code { get; set; }
         [DataMember]
         public int doctor_id { get; set; }
         [DataMember]
@@ -111,13 +116,18 @@ namespace HOORESTService
     public partial class DSCRs
     {
         private int rowCount = 0;
+        private double totalNetSale = 0.0;
+        private double netOfVat = 0.0;
+        private double retention = 0.0;
+        private double totalAmountOfSharing = 0.0;
+        private double MDShare60 = 0.0;
         private static readonly DSCRs _instance = new DSCRs();
         private DSCRs() { }
+        private string folder = System.Configuration.ConfigurationManager.AppSettings["ReportFolder"];
         public static DSCRs Instance
         {
             get { return _instance; }
         }
-
         public DSCR GetDSCR(DSCR dscr)
         {
             DSCR result = new DSCR();
@@ -233,7 +243,6 @@ namespace HOORESTService
 
             return result;
         }
-
         public DSCR GetDSCRbyRange(DSCR dscr)
         {
             DSCR result = new DSCR();
@@ -295,7 +304,6 @@ namespace HOORESTService
 
             return result;
         }
-
         public List<Detail> DSCRDetails(string rr_number)
         {
             MySQL m = new MySQL();
@@ -323,7 +331,6 @@ namespace HOORESTService
             }
             return details;
         }
-
         public DSCR Insert(DSCR dscr)
         {
             MySQL m = new MySQL();
@@ -396,7 +403,6 @@ namespace HOORESTService
             m.Insert(log);
             return dscr;
         }
-
         public DSCR Update(DSCR dscr)
         {
             MySQL m = new MySQL();
@@ -422,75 +428,104 @@ namespace HOORESTService
             Insert(dscr);
             return dscr;
         }
-
-        public bool MDShare(DSCR param)
+        public string MDShare(DSCR param)
         {
-            MySQL m = new MySQL();
-            int branch_id = param.branch_id;
-            string datefrom = param.trx_date_from;
-            string dateto = param.trx_date_to;
-            string branch_name = param.branch_name;
-            string sql = string.Format("CALL `prod_syshoo_db`.`sp_mdshare`({0}, '{1}', '{2}');", branch_id, datefrom, dateto);
-
-            System.Data.DataTable data = m.Select(sql);
-            var Doctors = data.AsEnumerable().Select(r => new
+            try
             {
-                doctor_id = r.Field<int>("doctor_id"),
-                doctor_name = r.Field<string>("doctor_name")
-            }).Distinct();
+                MySQL m = new MySQL();
+                int branch_id = param.branch_id;
+                string datefrom = param.trx_date_from;
+                string dateto = param.trx_date_to;
+                string branch_name = param.branch_name;
 
+                string sql = string.Format("CALL `prod_syshoo_db`.`sp_mdshare`({0}, '{1}', '{2}');", branch_id, datefrom, dateto);
+                System.Data.DataTable data = m.Select(sql);
+                sql = "select id, code_fld, value_fld from prod_syshoo_db.hoo_setupcodes_tbl where category_fld = 'item_group' order by code_fld;";
+                System.Data.DataTable CategoryData = m.Select(sql);
 
-            Application xlApp = new Application();
-            Workbook wb = xlApp.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
-            foreach (var item in Doctors)
-            {
-                wb.Worksheets.Add();
-            }
+                Spire.Xls.Workbook wb = new Spire.Xls.Workbook();
 
-            int doctorIdx = 1;
-            foreach (var item in Doctors)
-            {
-                rowCount = 7;
-                Worksheet ws = (Worksheet)wb.Worksheets[doctorIdx];
-                var dr_name = item.doctor_name;
-                if (dr_name.Length > 30)
+                //Initailize worksheet
+                Spire.Xls.Worksheet sheet = wb.Worksheets[0];
+
+                var Doctors = data.AsEnumerable().Select(r => new
                 {
-                    ws.Name = item.doctor_name.Substring(0, 29);
-                }
-                else
+                    doctor_id = r.Field<int>("doctor_id"),
+                    doctor_name = r.Field<string>("doctor_name")
+                }).Distinct();
+
+                int wbCount = wb.Worksheets.Count() - 1;
+                int DrCount = Doctors.Count();
+
+                int i = 0;
+                foreach (var item in Doctors)
                 {
-                    ws.Name = item.doctor_name;
+                    rowCount = 7;
+                    var dr_name = item.doctor_name;
+                    if (item.doctor_name.Length >= 29)
+                    {
+                        dr_name = item.doctor_name.Substring(0, 29);
+                    }
+
+                    if (wbCount >= i)
+                    {
+                        //rename
+                        Worksheet sh = wb.Worksheets[i];
+                        sh.Name = dr_name;
+                    }
+                    else
+                    {
+                        //add
+                        wb.Worksheets.Add(dr_name);
+                    }
+
+                    sheet = wb.Worksheets[i];
+                    ExcelColumnMDShare(sheet, dr_name, param.branch_name, wb);
+
+                    foreach (DataRow category in CategoryData.Rows)
+                    {
+
+                        var PerGroupData = data.AsEnumerable().Where(row => (row.Field<Int32>("item_group") == category.Field<Int32>("id")) && (row.Field<int>("doctor_id") == item.doctor_id));
+                        if (PerGroupData.Count() > 0)
+                        {
+                            totalNetSale = 0.0;
+                            netOfVat = 0.0;
+                            retention = 0.0;
+                            totalAmountOfSharing = 0.0;
+                            PerGroup(sheet, PerGroupData, category.Field<string>("value_fld"), category.Field<string>("code_fld"));
+                            rowCount += 4;
+                        }
+                    }
+
+                    sheet.Columns[9].NumberFormat = "#,##0.00";
+                    sheet.Columns[10].NumberFormat = "#,##0.00";
+                    sheet.Columns[11].NumberFormat = "#,##0.00";
+                    sheet.Columns[12].NumberFormat = "#,##0.00";
+                    sheet.Columns[13].NumberFormat = "#,##0.00";
+                    sheet.AllocatedRange.AutoFitColumns();
+                    sheet.AllocatedRange.AutoFitRows();
+
+                    i += 1;
+
                 }
-                ws.Select();
-                OBAGI(ws, data);
-                ExcelColumn(ws, ws.Name, branch_name);
-                doctorIdx += 1;
 
-                ws.Columns.EntireColumn.AutoFit();
+
+
+                string dateStamp = DateTime.Now.ToString("MMddyyyy_HHmmss");
+                wb.SaveToFile(@folder.ToString() + branch_name + "_MDSHARE" + dateStamp + ".xlsx", ExcelVersion.Version2013);
+                return folder.ToString() + branch_name + "_MDSHARE" + dateStamp + ".xlsx";
             }
-
-
-
-            xlApp.Visible = true;
-            xlApp.UserControl = true;
-
-
-
-            // Release object references.      
-
-            wb = null;
-            //xlApp.Quit();
-            xlApp = null;
-
-            return true;
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
-
-        private void ExcelColumn(Worksheet ws, string DoctorName, string BranchName)
+        private void ExcelColumnMDShare(Worksheet ws, string DoctorName, string BranchName, Workbook wb)
         {
             ws.Range["A1"].Value = "DAILY SALES AND COLLECTIONS REPORT";
-            ws.Range["A1", "F1"].Merge();
+            ws.Range["A1:F1"].Merge();
             ws.Range["A4"].Value = DoctorName;
-            ws.Range["A4", "F4"].Merge();
+            ws.Range["A4:F4"].Merge();
             ws.Range["A6"].Value = "DATE";
             ws.Range["B6"].Value = "RR#";
             ws.Range["C6"].Value = "SI#";
@@ -505,17 +540,20 @@ namespace HOORESTService
             ws.Range["L6"].Value = "GROSS PROFIT";
             ws.Range["M6"].Value = "AMOUNT FOR SHARING";
             ws.Range["N6"].Value = "MD SHARE 60%";
-            ws.Range["A6", "N6"].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightBlue);
-            ws.Range["A6", "N6"].Font.Bold = true;
+            ws.Range["A6:N6"].Style.Interior.Color = System.Drawing.Color.LightBlue;
+            ws.Range["A6:N6"].Style.Font.IsBold = true;
             ws.Range["A2"].Value = BranchName;
-            ws.Range["A2", "F2"].Merge();
+            ws.Range["A2:F2"].Merge();
         }
-        private void OBAGI(Worksheet ws, System.Data.DataTable dt)
+        private void PerGroup(Worksheet ws, EnumerableRowCollection<DataRow> dt, string GroupName, string GroupCode)
         {
-            ws.Cells[rowCount, 1] = "OBAGI";
+            if (dt.Count() > 0)
+            {
+                ws.Range[rowCount, 1].Value = GroupName;
+
+            }
             rowCount += 1;
-            
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRow row in dt)
             {
                 string petsa = row["trx_date"].ToString();
                 string Prefix = row["prefix"].ToString();
@@ -523,13 +561,254 @@ namespace HOORESTService
                 string si_number = row["si_number"].ToString();
                 string or_number = row["or_number"].ToString();
                 string patient = row["patient_name"].ToString();
-                ws.Cells[rowCount, 1] = petsa.Replace("00:00:00", "");
-                ws.Cells[rowCount, 2] = Prefix + "-" + rr_number;
-                ws.Cells[rowCount, 3] = si_number;
-                ws.Cells[rowCount, 4] = or_number;
-                ws.Cells[rowCount, 5] = patient;
+                string explanation = row["explanation"].ToString();
+                string particular = row["particular"].ToString();
+                string quantity = row["quantity"].ToString();
+                string session = row["session"].ToString();
+                string net_sales = row["net_sales"].ToString();
+                double PatientPrice = Convert.ToDouble(net_sales);
+                double MDPrice = Convert.ToDouble(row["cost"].ToString());
+                double retention = Convert.ToDouble(row["retention"].ToString());
+                MDPrice = Convert.ToDouble(MDPrice) * Convert.ToDouble(quantity);
+                string SearchForThis = "3plus1";
+                bool threePlusOne = explanation.Contains(SearchForThis);
+                SearchForThis = "BOGO";
+                bool BOGO = explanation.Contains(SearchForThis);
+                SearchForThis = "10%";
+                bool tenPercent = explanation.Contains(SearchForThis);
+                SearchForThis = "15%";
+                bool fifteenPercent = explanation.Contains(SearchForThis);
+                SearchForThis = "20%";
+                bool twentyPercent = explanation.Contains(SearchForThis);
+                SearchForThis = "25%";
+                bool twentyFivePercent = explanation.Contains(SearchForThis);
+                SearchForThis = "30%";
+                bool thirtyPercent = explanation.Contains(SearchForThis);
+                SearchForThis = "35%";
+                bool thirtyFivePercent = explanation.Contains(SearchForThis);
+                SearchForThis = "40%";
+                bool fortyPercent = explanation.Contains(SearchForThis);
+                SearchForThis = "45%";
+                bool fortyFivePercent = explanation.Contains(SearchForThis);
+                SearchForThis = "50%";
+                bool fiftyPercent = explanation.Contains(SearchForThis);
+                if (threePlusOne)
+                {
+                    PatientPrice = PatientPrice * 0.75;
+                    MDPrice = MDPrice * 0.75;
+                }
+                else if (BOGO)
+                {
+                    MDPrice = MDPrice * 0.5;
+                }
+                else if (tenPercent)
+                {
+                    MDPrice = MDPrice * 0.9;
+                }
+                else if (fifteenPercent)
+                {
+                    MDPrice = MDPrice * 0.85;
+                }
+                else if (twentyPercent)
+                {
+                    MDPrice = MDPrice * 0.8;
+                }
+                else if (twentyFivePercent)
+                {
+                    MDPrice = MDPrice * 0.75;
+                }
+                else if (thirtyPercent)
+                {
+                    MDPrice = MDPrice * 0.7;
+                }
+                else if (thirtyFivePercent)
+                {
+                    MDPrice = MDPrice * 0.65;
+                }
+                else if (fortyPercent)
+                {
+                    MDPrice = MDPrice * 0.6;
+                }
+                else if (fortyFivePercent)
+                {
+                    MDPrice = MDPrice * 0.55;
+                }
+                else if (fiftyPercent)
+                {
+                    MDPrice = MDPrice * 0.5;
+                }
+
+                double GrossProfit = PatientPrice - MDPrice;
+                if (GrossProfit < 0)
+                {
+                    PatientPrice = 0;
+                    MDPrice = 0;
+                    GrossProfit = 0;
+                }
+
+                ws.Range[rowCount, 1].Value = petsa.Replace("00:00:00", "");
+                ws.Range[rowCount, 2].Value = Prefix + "-" + rr_number;
+                ws.Range[rowCount, 3].Value = si_number;
+                ws.Range[rowCount, 4].Value = or_number;
+                ws.Range[rowCount, 5].Value = patient;
+                ws.Range[rowCount, 6].Value = explanation;
+                ws.Range[rowCount, 7].Value = particular;
+                ws.Range[rowCount, 8].Value = "'" + quantity;
+                ws.Range[rowCount, 9].Value = "'" + session;
+                ws.Range[rowCount, 10].Value = PatientPrice.ToString();
+                ws.Range[rowCount, 11].Value = MDPrice.ToString();
+                ws.Range[rowCount, 12].Value = GrossProfit.ToString();
+
                 rowCount += 1;
+                ws.Range[rowCount, 11].Value = "TOTAL NET SALE";
+                ws.Range[rowCount + 1, 11].Value = "NET OF VAT";
+                ws.Range[rowCount + 2, 11].Value = "LESS:RETENTION COST";
+
+                totalNetSale = totalNetSale + GrossProfit;
+                netOfVat = totalNetSale / 1.12;
+
+                if (GroupCode == "BTX")
+                {
+                    retention = (totalNetSale / 420) * 174.07;
+                }
+                else if (GroupCode == "THER_EYES")
+                {
+                    retention = 15000.00;
+                }
+                else if (GroupCode == "THER_BODY")
+                {
+                    retention = 34000.00;
+                }
+                else if (GroupCode == "THER_FN")
+                {
+                    retention = 20000.00;
+                }
+                else if (GroupCode == "ULTH_FN")
+                {
+                    retention = 40000.00;
+                }
+                else if (GroupCode == "ULTH_FACE")
+                {
+                    retention = 29000.00;
+                }
+                else if (GroupCode == "ULTH_BROW")
+                {
+                    retention = 18000.00;
+                }
+                else if (GroupCode == "ULTH_JAW")
+                {
+                    retention = 18000.00;
+                }
+                else if (GroupCode == "ULTH_FOC")
+                {
+                    retention = 20000.00;
+                }
+                else
+                {
+                    retention = netOfVat * retention;
+                }
+
+                totalAmountOfSharing = netOfVat - retention;
+                MDShare60 = totalAmountOfSharing * 0.6;
+                ws.Range[rowCount, 12].Value = totalNetSale.ToString();
+                ws.Range[rowCount + 1, 12].Value = netOfVat.ToString();
+                ws.Range[rowCount + 2, 12].Value = retention.ToString();
+                ws.Range[rowCount + 2, 13].Value = totalAmountOfSharing.ToString();
+                ws.Range[rowCount + 2, 14].Value = MDShare60.ToString();
             }
         }
+        public string SalesReportPerBranch(DSCR param)
+        {
+            try
+            {
+                MySQL m = new MySQL();
+                int branch_id = param.branch_id;
+                string datefrom = param.trx_date_from;
+                string dateto = param.trx_date_to;
+                string branch_name = param.branch_name;
+
+                string sql = string.Format("CALL `prod_syshoo_db`.`sp_mdshare`({0}, '{1}', '{2}');", branch_id, datefrom, dateto);
+                System.Data.DataTable data = m.Select(sql);
+                sql = "select id, code_fld, value_fld from prod_syshoo_db.hoo_setupcodes_tbl where category_fld = 'item_group' order by code_fld;";
+                System.Data.DataTable CategoryData = m.Select(sql);
+
+                Spire.Xls.Workbook wb = new Spire.Xls.Workbook();
+
+                //Initailize worksheet
+                Spire.Xls.Worksheet sheet = wb.Worksheets[0];
+                SalesReportPerBranchColumn(sheet, branch_name);
+
+                //Loop
+                rowCount = 7;
+                var total = 0.0;
+                var GrandTotal = 0.0;
+                foreach (DataRow category in CategoryData.Rows)
+                {
+                    var SalesReportPerBranch = data.AsEnumerable().Where(row => (row.Field<Int32>("item_group") == category.Field<Int32>("id")));
+                    if (SalesReportPerBranch.Count() > 0)
+                    {
+                        sheet.Range[rowCount, 1].Value = category.Field<string>("value_fld");
+                        rowCount += 1;
+                        total = 0.0;
+                        foreach (DataRow row in SalesReportPerBranch)
+                        {
+                            string petsa = row["trx_date"].ToString();
+                            string Prefix = row["prefix"].ToString();
+                            string rr_number = row["rr_number"].ToString();
+                            string patient = row["patient_name"].ToString();
+                            string particular = row["particular"].ToString();
+                            string explanation = row["explanation"].ToString();
+                            double net_sales = Convert.ToDouble(row["net_sales"].ToString());
+
+                            sheet.Range[rowCount, 1].Value = row["trx_date"].ToString();
+                            sheet.Range[rowCount, 2].Value = row["prefix"].ToString() + "-" + row["rr_number"].ToString();
+                            sheet.Range[rowCount, 3].Value = row["patient_name"].ToString();
+                            sheet.Range[rowCount, 4].Value = row["explanation"].ToString();
+                            sheet.Range[rowCount, 5].Value = row["particular"].ToString();
+                            sheet.Range[rowCount, 6].Value = row["net_sales"].ToString(); ;
+                            rowCount += 1;
+                            sheet.Range[rowCount, 5].Value = "TOTAL NET SALE";
+                            total += Convert.ToDouble(row["net_sales"].ToString());
+                            sheet.Range[rowCount, 6].Value = total.ToString();
+                        }
+                        rowCount += 2;
+                        GrandTotal += total;
+                    }
+                    sheet.Range[5, 6].Value = GrandTotal.ToString();
+                    sheet.Range[5, 5].Value = "GRAND TOTAL:";
+                    sheet.Range[5, 6].NumberFormat = "#,##0.00";
+                }
+
+
+                sheet.Columns[5].NumberFormat = "#,##0.00";
+                sheet.AllocatedRange.AutoFitColumns();
+                sheet.AllocatedRange.AutoFitRows();
+
+                string dateStamp = DateTime.Now.ToString("MMddyyyy_HHmmss");
+                wb.SaveToFile(@folder.ToString() + branch_name + "_SalesPerBranch" + dateStamp + ".xlsx", ExcelVersion.Version2013);
+                return folder.ToString() + branch_name + "_SalesPerBranch" + dateStamp + ".xlsx";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+        private void SalesReportPerBranchColumn(Worksheet ws, string BranchName)
+        {
+            ws.Range["A1"].Value = "SALES PER BRANCH REPORT";
+            ws.Range["A1:F1"].Merge();
+            ws.Range["A4"].Value = BranchName;
+            ws.Range["A6"].Value = "DATE";
+            ws.Range["B6"].Value = "RR#";
+            ws.Range["C6"].Value = "PATIENT NAME";
+            ws.Range["D6"].Value = "EXPLANATION";
+            ws.Range["E6"].Value = "PARTICULARS";
+            ws.Range["F6"].Value = "SALES";
+            ws.Range["A6:F6"].Style.Interior.Color = System.Drawing.Color.LightBlue;
+            ws.Range["A6:F6"].Style.Font.IsBold = true;
+            ws.Range["A2:F2"].Merge();
+
+        }
+
     }
 }
