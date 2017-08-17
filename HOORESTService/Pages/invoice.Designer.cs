@@ -355,6 +355,8 @@ namespace HOORESTService.Pages {
             
             private global::System.Data.DataColumn columnCheck;
             
+            private global::System.Data.DataColumn columnCreditCard;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public sp_dscrDataTable() {
@@ -694,6 +696,14 @@ namespace HOORESTService.Pages {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CreditCardColumn {
+                get {
+                    return this.columnCreditCard;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -766,7 +776,8 @@ namespace HOORESTService.Pages {
                         string explanation, 
                         string item_name_fld, 
                         decimal Card, 
-                        decimal Check) {
+                        decimal Check, 
+                        decimal CreditCard) {
                 sp_dscrRow rowsp_dscrRow = ((sp_dscrRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         prefix,
@@ -806,7 +817,8 @@ namespace HOORESTService.Pages {
                         explanation,
                         item_name_fld,
                         Card,
-                        Check};
+                        Check,
+                        CreditCard};
                 rowsp_dscrRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowsp_dscrRow);
                 return rowsp_dscrRow;
@@ -874,6 +886,7 @@ namespace HOORESTService.Pages {
                 this.columnitem_name_fld = base.Columns["item_name_fld"];
                 this.columnCard = base.Columns["Card"];
                 this.columnCheck = base.Columns["Check"];
+                this.columnCreditCard = base.Columns["CreditCard"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -955,6 +968,8 @@ namespace HOORESTService.Pages {
                 base.Columns.Add(this.columnCard);
                 this.columnCheck = new global::System.Data.DataColumn("Check", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCheck);
+                this.columnCreditCard = new global::System.Data.DataColumn("CreditCard", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCreditCard);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnid}, true));
                 this.columnprefix.MaxLength = 45;
@@ -1722,6 +1737,22 @@ namespace HOORESTService.Pages {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public decimal CreditCard {
+                get {
+                    try {
+                        return ((decimal)(this[this.tablesp_dscr.CreditCardColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CreditCard\' in table \'sp_dscr\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablesp_dscr.CreditCardColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsprefixNull() {
                 return this.IsNull(this.tablesp_dscr.prefixColumn);
             }
@@ -2163,6 +2194,18 @@ namespace HOORESTService.Pages {
             public void SetCheckNull() {
                 this[this.tablesp_dscr.CheckColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCreditCardNull() {
+                return this.IsNull(this.tablesp_dscr.CreditCardColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCreditCardNull() {
+                this[this.tablesp_dscr.CreditCardColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -2362,6 +2405,7 @@ namespace HOORESTService.Pages.invoiceTableAdapters {
             tableMapping.ColumnMappings.Add("item_name_fld", "item_name_fld");
             tableMapping.ColumnMappings.Add("Card", "Card");
             tableMapping.ColumnMappings.Add("Check", "Check");
+            tableMapping.ColumnMappings.Add("CreditCard", "CreditCard");
             this._adapter.TableMappings.Add(tableMapping);
         }
         

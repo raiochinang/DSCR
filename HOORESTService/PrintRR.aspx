@@ -46,7 +46,7 @@
                 <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="" />
             </div>
             <div>
-                <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="password12" />
+                <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="" />
             </div>
             <div>
                 <button class="btnLogin" data-align="center" style="position: absolute; bottom: 4px; right: 10px;">LOG IN</button>

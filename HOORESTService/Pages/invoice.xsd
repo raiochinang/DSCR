@@ -61,6 +61,7 @@
               <Mapping SourceColumn="item_name_fld" DataSetColumn="item_name_fld" />
               <Mapping SourceColumn="Card" DataSetColumn="Card" />
               <Mapping SourceColumn="Check" DataSetColumn="Check" />
+              <Mapping SourceColumn="CreditCard" DataSetColumn="CreditCard" />
             </Mappings>
             <Sources />
           </TableAdapter>
@@ -72,7 +73,7 @@
   <xs:element name="invoice" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="invoice" msprop:Generator_UserDSName="invoice">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="sp_dscr" msprop:Generator_TableClassName="sp_dscrDataTable" msprop:Generator_TableVarName="tablesp_dscr" msprop:Generator_RowChangedName="sp_dscrRowChanged" msprop:Generator_TablePropName="sp_dscr" msprop:Generator_RowDeletingName="sp_dscrRowDeleting" msprop:Generator_RowChangingName="sp_dscrRowChanging" msprop:Generator_RowEvHandlerName="sp_dscrRowChangeEventHandler" msprop:Generator_RowDeletedName="sp_dscrRowDeleted" msprop:Generator_RowClassName="sp_dscrRow" msprop:Generator_UserTableName="sp_dscr" msprop:Generator_RowEvArgName="sp_dscrRowChangeEvent">
+        <xs:element name="sp_dscr" msprop:Generator_TableClassName="sp_dscrDataTable" msprop:Generator_TableVarName="tablesp_dscr" msprop:Generator_TablePropName="sp_dscr" msprop:Generator_RowDeletingName="sp_dscrRowDeleting" msprop:Generator_RowChangingName="sp_dscrRowChanging" msprop:Generator_RowEvHandlerName="sp_dscrRowChangeEventHandler" msprop:Generator_RowDeletedName="sp_dscrRowDeleted" msprop:Generator_UserTableName="sp_dscr" msprop:Generator_RowChangedName="sp_dscrRowChanged" msprop:Generator_RowEvArgName="sp_dscrRowChangeEvent" msprop:Generator_RowClassName="sp_dscrRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="prefix" msprop:Generator_ColumnVarNameInTable="columnprefix" msprop:Generator_ColumnPropNameInRow="prefix" msprop:Generator_ColumnPropNameInTable="prefixColumn" msprop:Generator_UserColumnName="prefix" minOccurs="0">
@@ -203,6 +204,7 @@
               </xs:element>
               <xs:element name="Card" msprop:Generator_ColumnVarNameInTable="columnCard" msprop:Generator_ColumnPropNameInRow="Card" msprop:Generator_ColumnPropNameInTable="CardColumn" msprop:Generator_UserColumnName="Card" type="xs:decimal" minOccurs="0" />
               <xs:element name="Check" msprop:Generator_ColumnVarNameInTable="columnCheck" msprop:Generator_ColumnPropNameInRow="Check" msprop:Generator_ColumnPropNameInTable="CheckColumn" msprop:Generator_UserColumnName="Check" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CreditCard" msprop:Generator_ColumnVarNameInTable="columnCreditCard" msprop:Generator_ColumnPropNameInRow="CreditCard" msprop:Generator_ColumnPropNameInTable="CreditCardColumn" msprop:Generator_UserColumnName="CreditCard" type="xs:decimal" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
