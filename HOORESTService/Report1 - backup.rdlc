@@ -386,7 +386,7 @@
   <Width>9.56125in</Width>
   <Page>
     <PageHeader>
-      <Height>1.81771in</Height>
+      <Height>1.30729in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -411,7 +411,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>trx_date</rd:DefaultName>
-          <Top>0.62722in</Top>
+          <Top>0.12722in</Top>
           <Left>0.8668in</Left>
           <Height>0.25in</Height>
           <Width>1in</Width>
@@ -445,7 +445,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>trx_time_from</rd:DefaultName>
-          <Top>0.87722in</Top>
+          <Top>0.37722in</Top>
           <Left>0.8668in</Left>
           <Height>0.25in</Height>
           <Width>0.84375in</Width>
@@ -480,7 +480,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>trx_time_to</rd:DefaultName>
-          <Top>0.87722in</Top>
+          <Top>0.37722in</Top>
           <Left>1.85291in</Left>
           <Height>0.25in</Height>
           <Width>1in</Width>
@@ -513,7 +513,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox5</rd:DefaultName>
-          <Top>0.62722in</Top>
+          <Top>0.12722in</Top>
           <Left>0.11333in</Left>
           <Height>0.25in</Height>
           <Width>0.64583in</Width>
@@ -546,7 +546,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox6</rd:DefaultName>
-          <Top>0.87722in</Top>
+          <Top>0.37722in</Top>
           <Left>1.71055in</Left>
           <Height>0.25in</Height>
           <Width>0.14236in</Width>
@@ -579,7 +579,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox7</rd:DefaultName>
-          <Top>0.87722in</Top>
+          <Top>0.37722in</Top>
           <Left>0.11333in</Left>
           <Height>0.25in</Height>
           <Width>0.64583in</Width>
@@ -612,7 +612,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>patient_name</rd:DefaultName>
-          <Top>1.14111in</Top>
+          <Top>0.64111in</Top>
           <Left>0.8668in</Left>
           <Height>0.25in</Height>
           <Width>3.34722in</Width>
@@ -645,7 +645,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox9</rd:DefaultName>
-          <Top>1.14111in</Top>
+          <Top>0.64111in</Top>
           <Left>0.11333in</Left>
           <Height>0.25in</Height>
           <Width>0.73958in</Width>
@@ -678,7 +678,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox5</rd:DefaultName>
-          <Top>0.62722in</Top>
+          <Top>0.12722in</Top>
           <Left>4.35291in</Left>
           <Height>0.25in</Height>
           <Width>0.69098in</Width>
@@ -713,7 +713,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Card</rd:DefaultName>
-          <Top>0.62722in</Top>
+          <Top>0.12722in</Top>
           <Left>5.04389in</Left>
           <Height>0.25in</Height>
           <Width>1.40277in</Width>
@@ -746,7 +746,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox5</rd:DefaultName>
-          <Top>0.89111in</Top>
+          <Top>0.39111in</Top>
           <Left>4.35291in</Left>
           <Height>0.25in</Height>
           <Width>0.69098in</Width>
@@ -781,7 +781,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Check</rd:DefaultName>
-          <Top>0.89111in</Top>
+          <Top>0.39111in</Top>
           <Left>5.04389in</Left>
           <Height>0.25in</Height>
           <Width>1.40277in</Width>
@@ -814,7 +814,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox5</rd:DefaultName>
-          <Top>1.14111in</Top>
+          <Top>0.64111in</Top>
           <Left>4.35291in</Left>
           <Height>0.25in</Height>
           <Width>0.69098in</Width>
@@ -849,7 +849,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Check</rd:DefaultName>
-          <Top>1.14111in</Top>
+          <Top>0.64111in</Top>
           <Left>5.04389in</Left>
           <Height>0.25in</Height>
           <Width>1.40277in</Width>
@@ -882,7 +882,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox5</rd:DefaultName>
-          <Top>1.405in</Top>
+          <Top>0.905in</Top>
           <Left>4.35291in</Left>
           <Height>0.25in</Height>
           <Width>0.69097in</Width>
@@ -917,7 +917,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Check</rd:DefaultName>
-          <Top>1.405in</Top>
+          <Top>0.905in</Top>
           <Left>5.04389in</Left>
           <Height>0.25in</Height>
           <Width>1.40278in</Width>
@@ -940,7 +940,7 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>3.73958in</Height>
+      <Height>1in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -964,7 +964,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox10</rd:DefaultName>
-          <Top>0.35292in</Top>
+          <Top>0.72792in</Top>
           <Left>0.01042in</Left>
           <Height>0.25in</Height>
           <Width>1.70014in</Width>
@@ -998,7 +998,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>doctor_name</rd:DefaultName>
-          <Top>0.125in</Top>
+          <Top>0.46403in</Top>
           <Left>0.01042in</Left>
           <Height>0.25in</Height>
           <Width>1.71055in</Width>
@@ -1036,7 +1036,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox12</rd:DefaultName>
-          <Top>0.35292in</Top>
+          <Top>0.72792in</Top>
           <Left>1.78in</Left>
           <Height>0.25in</Height>
           <Width>1.49306in</Width>
@@ -1071,7 +1071,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>nurse_name</rd:DefaultName>
-          <Top>0.125in</Top>
+          <Top>0.46403in</Top>
           <Left>1.78in</Left>
           <Height>0.25in</Height>
           <Width>1.49306in</Width>
@@ -1109,7 +1109,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox14</rd:DefaultName>
-          <Top>0.33903in</Top>
+          <Top>0.71403in</Top>
           <Left>3.3425in</Left>
           <Height>0.25in</Height>
           <Width>1.36806in</Width>
@@ -1144,7 +1144,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>cashier_name</rd:DefaultName>
-          <Top>0.125in</Top>
+          <Top>0.46403in</Top>
           <Left>3.3425in</Left>
           <Height>0.25in</Height>
           <Width>1.36806in</Width>
@@ -1182,7 +1182,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox16</rd:DefaultName>
-          <Top>0.35292in</Top>
+          <Top>0.72792in</Top>
           <Left>4.78in</Left>
           <Height>0.25in</Height>
           <Width>1.67708in</Width>
@@ -1217,7 +1217,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>patient_name1</rd:DefaultName>
-          <Top>0.125in</Top>
+          <Top>0.46403in</Top>
           <Left>4.78in</Left>
           <Height>0.25in</Height>
           <Width>1.67708in</Width>
@@ -1242,10 +1242,8 @@
         </Border>
       </Style>
     </PageFooter>
-    <LeftMargin>1in</LeftMargin>
-    <RightMargin>1in</RightMargin>
-    <TopMargin>1in</TopMargin>
-    <BottomMargin>1in</BottomMargin>
+    <PageHeight>6.7in</PageHeight>
+    <PageWidth>11.69in</PageWidth>
     <Style />
   </Page>
   <AutoRefresh>0</AutoRefresh>

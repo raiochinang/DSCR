@@ -73,7 +73,7 @@
   <xs:element name="invoice" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="invoice" msprop:Generator_UserDSName="invoice">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="sp_dscr" msprop:Generator_TableClassName="sp_dscrDataTable" msprop:Generator_TableVarName="tablesp_dscr" msprop:Generator_TablePropName="sp_dscr" msprop:Generator_RowDeletingName="sp_dscrRowDeleting" msprop:Generator_RowChangingName="sp_dscrRowChanging" msprop:Generator_RowEvHandlerName="sp_dscrRowChangeEventHandler" msprop:Generator_RowDeletedName="sp_dscrRowDeleted" msprop:Generator_UserTableName="sp_dscr" msprop:Generator_RowChangedName="sp_dscrRowChanged" msprop:Generator_RowEvArgName="sp_dscrRowChangeEvent" msprop:Generator_RowClassName="sp_dscrRow">
+        <xs:element name="sp_dscr" msprop:Generator_TableClassName="sp_dscrDataTable" msprop:Generator_TableVarName="tablesp_dscr" msprop:Generator_RowChangedName="sp_dscrRowChanged" msprop:Generator_TablePropName="sp_dscr" msprop:Generator_RowDeletingName="sp_dscrRowDeleting" msprop:Generator_RowChangingName="sp_dscrRowChanging" msprop:Generator_RowEvHandlerName="sp_dscrRowChangeEventHandler" msprop:Generator_RowDeletedName="sp_dscrRowDeleted" msprop:Generator_RowClassName="sp_dscrRow" msprop:Generator_UserTableName="sp_dscr" msprop:Generator_RowEvArgName="sp_dscrRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="prefix" msprop:Generator_ColumnVarNameInTable="columnprefix" msprop:Generator_ColumnPropNameInRow="prefix" msprop:Generator_ColumnPropNameInTable="prefixColumn" msprop:Generator_UserColumnName="prefix" minOccurs="0">

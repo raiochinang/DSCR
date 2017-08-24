@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,16 +12,7 @@ using System.Web.UI.WebControls;
 namespace HOORESTService
 {
     public partial class PrintRR : System.Web.UI.Page
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (!IsPostBack)
-            {
-               
-               
-            }
-        }
-
+    {        
         protected void btnPrint_Click(object sender, EventArgs e)
         {
           
@@ -35,8 +27,8 @@ namespace HOORESTService
             ReportViewer1.Reset();
             DataTable dt = GetData(prefix, rr);
             ReportDataSource rds = new ReportDataSource("DataSet1", dt);
-            ReportViewer1.LocalReport.DataSources.Add(rds);
-            ReportViewer1.LocalReport.ReportPath = "Report1.rdlc";
+            ReportViewer1.LocalReport.DataSources.Add(rds);            
+            ReportViewer1.LocalReport.ReportPath = "Report2.rdlc";       
             ReportViewer1.LocalReport.Refresh();
         }
 
