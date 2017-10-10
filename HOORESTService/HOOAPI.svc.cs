@@ -10,6 +10,8 @@ using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.ServiceModel.Web;
+using MyDownloader.Core;
 
 namespace HOORESTService
 {
@@ -49,6 +51,11 @@ namespace HOORESTService
         public DSCR dscr(DSCR dscr)
         {
             return DSCRs.Instance.GetDSCR(dscr);
+        }
+
+        public string DSCRPrint(DSCR dscr)
+        {
+            return DSCRs.Instance.DSCRPrint(dscr);
         }
 
         public DSCR dscrByDateRange(DSCR dscr)
@@ -130,6 +137,16 @@ namespace HOORESTService
         {
             return DSCRs.Instance.SalesReportPerBranch(param);
         }
-               
+
+        public bool RetrieveFile(string path)
+        {
+            return true;
+
+        }
+
+        public List<Purchase> PurchaseList()
+        {            
+            return Purchases.Instance.PurchaseList();         
+        }
     }
 }

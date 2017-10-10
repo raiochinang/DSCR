@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <link href="~/../styles/reset.css?v=1" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    <link href="~/../styles/index.css?v=1" rel="stylesheet" />
+
+    <script src="~/../kendo/js/jquery.min.js"></script>    
+    <script src="~/../kendo/js/kendo.all.min.js"></script>    
+    <script src="~/../scripts/purchasing_master.js?v=6"></script>   
+</head>
+<body>
+    <!--drawer-->
+    <div data-role="drawer" id="left-drawer" style="width: 20em;" data-title="Menu" data-views="['purchasing_master', 'purchasing_view']" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+            </div>
+        </header>
+
+        <ul data-role="listview" class="km-listview-icons">           
+            <li data-icon="cart" id="purchasing_master">
+                <a href="#purchasing_master">
+                    Purchasing
+                </a>
+            </li>
+            <li data-icon="contacts" id="purchasing_view">
+                <a href="#purchasing_view">
+                    Purchasing
+                </a>
+            </li>
+            <li data-icon="logout">
+                <a href="#logout">
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!--views-->
+    <div data-role="view" id="purchasing_master" data-model="purchasing_master" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Purchasing" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="purchasing_masterContent">
+            <button data-role="button"
+                    data-icon="edit"
+                    data-bind="events: { click: onClick }"
+                    style="width: 180px">
+                Navigate
+            </button>
+            <div id="purchasing_masterGrid"></div>
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+            </div>
+        </footer>
+    </div>
+    <div data-role="view" id="purchasing_view" data-model="purchasing_view" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Purchasing" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="purchasingContent">
+            <div id="purchasing-wrapper">
+                <div style="float:left; width: 30%">
+                    <ul data-role="listview">
+                        <li>
+                            <label>Date:</label>
+                            <input type="text" id="purchasingTransDate" style="position: absolute;right: 10px;top: 3px;width: 68%;" />
+                            <!--<input type="text" id="purchasingTransDate" />-->
+                        </li>
+                        <li>
+                            <label>Reference:</label>
+                            <input type="text" id="purchasingTransDate" />
+                        </li>
+                        <li>
+                            <label>Supplier:</label>
+                            <input type="text" id="purchasingTransDate" />
+                        </li>
+                    </ul>
+                </div>
+                <div style="float:left; width: 30%">
+                    <ul data-role="listview">
+                        <li>
+                            <label>Note:</label>
+                            <textarea id="aaa" style="height:100px; text-transform: uppercase"></textarea>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div id="purchasing-wrapper" style="clear:both;">
+                <div id="purchasingDetailsGrid"></div>
+            </div>
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+                <button class="btnSave" data-align="right">SAVE</button>
+                <button class="btnCancel" data-align="right">RESET</button>
+            </div>
+        </footer>
+    </div>
+
+    <!--window-->
+    <div id="LoginWindow">
+        <div class="windowHeader">
+            Login
+        </div>
+        <div>
+            <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="mjagapinan" />
+        </div>
+        <div>
+            <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="mjagapinan" />
+        </div>
+        <div>
+            <button class="btnLogin" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">LOG IN</button>
+        </div>
+    </div>
+    <span id="notification"></span>
+</body>
+</html>

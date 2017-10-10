@@ -34,7 +34,7 @@ $(document).ready(function () {
     var methods = {
         init: function () {
             todayDate = kendo.toString(kendo.parseDate(new Date()), 'MM/dd/yyyy');
-            app = new kendo.mobile.Application(document.body, { skin: "flat" });
+           
             $('.btnCancel').kendoButton({
                 click: function () {
                     methods.Cancel();
@@ -504,6 +504,15 @@ $(document).ready(function () {
             methods.BindCheckGrid();
             methods.BindCreditCardGrid();
 
+            //purchasing
+
+          
+            $("#purchasingTransDate").kendoDatePicker({
+                animation: false,
+                value: todayDate
+            });
+            methods.bindPurchasingGrid();
+
         },
         Styles: function () {
             $("#dscrDate").css({
@@ -526,6 +535,11 @@ $(document).ready(function () {
             });
             $("#MDSHAREDateTo").css({
                 'width': '90%',
+                'left': '2px',
+            });
+
+            $("#purchasingTransDate").css({
+                'width': '86%',
                 'left': '2px',
             });
         },
@@ -1444,7 +1458,29 @@ $(document).ready(function () {
             service.post(url, JSON.stringify(DSCR), function (data) {
                 $("#notification").data("kendoNotification").show("Downloaded at " + data, "success");
             });
-        },        
+        },
+        bindPurchasingGrid: function () {
+            $('#purchasingDetailsGrid').kendoGrid({
+                columns: [
+                            { field: "item_name", title: "Particulars", width: 300 },
+                            { field: "item_name", title: "Lot Number", width: 300 },
+                            { field: "item_name", title: "Quantity", width: 100 },
+                            { field: "item_name", title: "Currency", width: 100 },
+                            { field: "item_name", title: "MD Price", width: 150 },
+                            { field: "item_name", title: "Actual Cost", width: 150 },
+                            { field: "item_name", title: "Expiration", width: 150 }
+                ],
+                editable: false,
+                scrollable: true,
+                sortable: false,
+                pageable: false,
+                filterable: false,
+                height: 290,
+            });
+        },
+        onViewShow: function () {
+            debugger;
+        }
     }
 
     var service = {
@@ -1468,6 +1504,19 @@ $(document).ready(function () {
         },
     }
 
+    var menu = {
+        initialize: function (role) {
+            if (role != 3 && role != 9) {
+                $('#UserMaintenanceList').hide();
+                $('#mdshare').hide();
+            }
+            else {
+                methods.adminGrid();
+                $('#branchddl').data('kendoDropDownList').enable(true);
+            }
+        }
+    }
+
     var callback = {
         Login: function (data) {
             if (data.username != null) {
@@ -1481,18 +1530,7 @@ $(document).ready(function () {
                 $('#currentUserBranch').html(data.username + "/" + data.branch.store_code_fld);
                 $('#LoginWindow').data('kendoWindow').close();
                 var d = new Date();
-
-                if (data.role != 3 && data.role != 9) {
-                    $('#UserMaintenanceList').hide();
-                }
-                else {
-                    methods.adminGrid();
-                    $('#branchddl').data('kendoDropDownList').enable(true);
-
-                }
-
-
-
+                menu.initialize(data.role);
             }
         },
         DSRCInsert: function (data) {
@@ -1653,9 +1691,9 @@ $(document).ready(function () {
         }
     }
 
-
+    app = new kendo.mobile.Application(document.body, { skin: "flat" });
     methods.init();
-
+       
     function selectFolder(e) {
         var theFiles = e.target.files;
         debugger;

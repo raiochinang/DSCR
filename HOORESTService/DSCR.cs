@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
 using Spire.Xls;
+using Newtonsoft.Json;
 
 namespace HOORESTService
 {
@@ -112,6 +113,26 @@ namespace HOORESTService
         [DataMember]
         public string explanation { get; set; }
     }
+
+    public class ResultDSCR
+    {
+        public string quantity { get; set; }
+        public string item_name_fld { get; set; }
+        public string trx_date { get; set; }
+        public string trx_time_from { get; set; }
+        public string trx_time_to { get; set; }
+        public string ar_amount { get; set; }
+        public string cash { get; set; }
+        public string net_sales { get; set; }        
+        public string doctor_name { get; set; }
+        public string nurse_name { get; set; }
+        public string cashier_name { get; set; }
+        public string patient_name { get; set; }
+        public string Card { get; set; }
+        public string Check { get; set; }
+        public string CreditCard { get; set; }        
+    }
+
 
     public partial class DSCRs
     {
@@ -243,6 +264,37 @@ namespace HOORESTService
 
             return result;
         }
+
+        public string DSCRPrint(DSCR dscr)
+        {   
+            MySQL m = new MySQL();         
+            string sql = string.Format("CALL `prod_syshoo_db`.`sp_dscrprint`('{0}', '{1}');", dscr.prefix, dscr.rr_number);
+            System.Data.DataTable data = m.Select(sql);
+            List<ResultDSCR> ResultsDSCR = new List<ResultDSCR>();
+            foreach (DataRow row in data.Rows)
+            {
+                ResultDSCR item = new ResultDSCR();                
+                item.quantity = row["quantity"].ToString();
+                item.item_name_fld = row["item_name_fld"].ToString();
+                item.trx_date = row["trx_date"].ToString();
+                item.trx_time_from = row["trx_time_from"].ToString();
+                item.trx_time_to = row["trx_time_to"].ToString();
+                item.ar_amount = row["ar_amount"].ToString();
+                item.cash = row["cash"].ToString();
+                item.net_sales = row["net_sales"].ToString();
+                item.doctor_name = row["doctor_name"].ToString();
+                item.nurse_name = row["nurse_name"].ToString();
+                item.cashier_name = row["cashier_name"].ToString();
+                item.patient_name = row["patient_name"].ToString();
+                item.Card = row["Card"].ToString();
+                item.Check = row["Check"].ToString();
+                item.CreditCard = row["CreditCard"].ToString();                
+                ResultsDSCR.Add(item);
+            }
+
+            return JsonConvert.SerializeObject(ResultsDSCR);           
+        }
+
         public DSCR GetDSCRbyRange(DSCR dscr)
         {
             DSCR result = new DSCR();
@@ -509,11 +561,12 @@ namespace HOORESTService
 
                 }
 
-
-
                 string dateStamp = DateTime.Now.ToString("MMddyyyy_HHmmss");
-                wb.SaveToFile(@folder.ToString() + branch_name + "_MDSHARE" + dateStamp + ".xlsx", ExcelVersion.Version2013);
-                return folder.ToString() + branch_name + "_MDSHARE" + dateStamp + ".xlsx";
+                string file = folder.ToString() + branch_name + "_MDSHARE" + dateStamp + ".xlsx";
+
+                wb.SaveToFile(@file, ExcelVersion.Version2013);
+
+                return file;
             }
             catch (Exception e)
             {

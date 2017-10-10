@@ -65,6 +65,13 @@ namespace HOORESTService
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
                              RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.WrappedResponse,
+                             UriTemplate = "DSCRPrint/")]
+        string DSCRPrint(DSCR dscr);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
                              BodyStyle = WebMessageBodyStyle.Bare,
                              UriTemplate = "DSCR/ByDateRange")]
         DSCR dscrByDateRange(DSCR dscr);
@@ -155,6 +162,11 @@ namespace HOORESTService
         #endregion Users
 
         #region "Generator"
+
+        [OperationContract]
+        [WebGet(UriTemplate = "RetrieveFile?Path={path}")]
+        bool RetrieveFile(string path);
+
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
                              RequestFormat = WebMessageFormat.Json,
@@ -168,7 +180,16 @@ namespace HOORESTService
                              BodyStyle = WebMessageBodyStyle.Bare,
                              UriTemplate = "SalesPerBranch/")]
         string SalesPerBranch(DSCR param);
-        
+
+        #endregion
+
+        #region "Purchasing"
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "Purchasing/")]
+        List<Purchase> PurchaseList();
         #endregion
     }
 }
