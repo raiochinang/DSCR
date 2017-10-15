@@ -1391,7 +1391,7 @@
     <Content Include="Pages\print.html" />
     <Content Include="Pages\scripts\index.js" />
     <Content Include="Pages\scripts\print.js" />
-    <Content Include="Pages\scripts\purchasing_master.js" />
+    <Content Include="Pages\scripts\purchasing.js" />
     <Content Include="Pages\styles\index.css" />
     <Content Include="Pages\styles\reset.css" />
     <Content Include="Pages\Untitled-1.txt" />

@@ -190,6 +190,26 @@ namespace HOORESTService
                              BodyStyle = WebMessageBodyStyle.Bare,
                              UriTemplate = "Purchasing/")]
         List<Purchase> PurchaseList();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,                            
+                            BodyStyle = WebMessageBodyStyle.Bare,
+                            UriTemplate = "Purchasing/{po_id}")]
+        Purchase PurchaseDetails(string po_id);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "Purchasing/Insert")]
+        Purchase PurchasingInsert(Purchase p);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "Purchasing/Update")]
+        Purchase PurchasingUpdate(Purchase p);
         #endregion
     }
 }

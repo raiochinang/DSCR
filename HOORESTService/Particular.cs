@@ -87,6 +87,15 @@ namespace HOORESTService
             return particulars;
 
         }
+        public Particular FindOne(int id)
+        {
+            MySQL m = new MySQL();
+            Particular particular = new Particular();
+            string sql = string.Format("SELECT id, item_name_fld from prod_syshoo_db.hoo_item_tbl where id = {0}; ", id);
+            DataTable data = m.Select(sql);
+            return particular;
+
+        }
         public bool Connection()
         {
             MySQL m = new MySQL();

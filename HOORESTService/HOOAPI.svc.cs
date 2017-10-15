@@ -148,5 +148,22 @@ namespace HOORESTService
         {            
             return Purchases.Instance.PurchaseList();         
         }
+
+        public Purchase PurchaseDetails(string po_id)
+        {
+            return Purchases.Instance.FindOne(po_id);
+        }
+
+
+        public Purchase PurchasingInsert(Purchase p)
+        {
+            return Purchases.Instance.Insert(p);
+        }
+
+
+        public Purchase PurchasingUpdate(Purchase p)
+        {
+            return Purchases.Instance.Update(p);
+        }
     }
 }

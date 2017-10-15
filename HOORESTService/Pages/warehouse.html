@@ -2,35 +2,42 @@
 <html>
 <head>
     <title></title>
-	<meta charset="utf-8" />
-    <link href="~/../styles/reset.css?v=1" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <!--<link href="~/../styles/reset.css?v=1" rel="stylesheet" />-->
     <link href="~/../kendo/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="~/../kendo/styles/kendo.default.min.css" rel="stylesheet" />
     <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.black.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.black.mobile.min.css" rel="stylesheet" />
     <link href="~/../styles/index.css?v=1" rel="stylesheet" />
 
-    <script src="~/../kendo/js/jquery.min.js"></script>    
-    <script src="~/../kendo/js/kendo.all.min.js"></script>    
-    <script src="~/../scripts/purchasing_master.js?v=6"></script>   
+    <script src="~/../kendo/js/jquery.min.js"></script>
+    <script src="~/../kendo/js/kendo.all.min.js"></script>
+    <script src="~/../scripts/purchasing.js?v=6"></script>
 </head>
 <body>
     <!--drawer-->
-    <div data-role="drawer" id="left-drawer" style="width: 20em;" data-title="Menu" data-views="['purchasing_master', 'purchasing_view']" data-use-native-scrolling="true">
+    <div data-role="drawer" id="left-drawer" style="width: 20em;" data-title="Menu" data-views="['home','purchasing_master', 'purchasing_view', 'delivery_receipt_master', 'delivery_receipt_view', 'clinic_request_master', 'clinic_request_view']" data-use-native-scrolling="true">
         <header data-role="header">
             <div data-role="navbar">
                 <span data-role="view-title"></span>
             </div>
         </header>
 
-        <ul data-role="listview" class="km-listview-icons">           
+        <ul data-role="listview" class="km-listview-icons">
             <li data-icon="cart" id="purchasing_master">
                 <a href="#purchasing_master">
-                    Purchasing
+                    Purchasing In
                 </a>
             </li>
-            <li data-icon="contacts" id="purchasing_view">
-                <a href="#purchasing_view">
-                    Purchasing
+            <li data-icon="cart" id="delivery_receipt_master">
+                <a href="#delivery_receipt_master">
+                    Delivery Receipt
+                </a>
+            </li>
+            <li data-icon="cart" id="clinic_request_master">
+                <a href="#clinic_request_master">
+                    Clinic Request
                 </a>
             </li>
             <li data-icon="logout">
@@ -42,7 +49,24 @@
     </div>
 
     <!--views-->
-    <div data-role="view" id="purchasing_master" data-model="purchasing_master" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Purchasing" data-use-native-scrolling="true">
+    <div data-role="view" id="home" data-scroller='{"elastic": false}' data-model="home_vm" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Home" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="purchasing_masterContent">
+
+            HOME
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+            </div>
+        </footer>
+    </div>
+    <div data-role="view" id="purchasing_master" data-scroller='{"elastic": false}' data-model="purchasing_master" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Purchase In" data-use-native-scrolling="true">
         <header data-role="header">
             <div data-role="navbar">
                 <span data-role="view-title"></span>
@@ -51,10 +75,10 @@
         </header>
         <div data-role="content" id="purchasing_masterContent">
             <button data-role="button"
-                    data-icon="edit"
-                    data-bind="events: { click: onClick }"
-                    style="width: 180px">
-                Navigate
+                    data-icon="refresh"
+                    data-bind="events: { click: onRefresh }"
+                    style="width: 150px">
+                Refresh
             </button>
             <div id="purchasing_masterGrid"></div>
         </div>
@@ -64,58 +88,129 @@
             </div>
         </footer>
     </div>
-    <div data-role="view" id="purchasing_view" data-model="purchasing_view" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Purchasing" data-use-native-scrolling="true">
+    <div data-role="view" id="purchasing_view" data-model="purchasing_view" data-scroller='{"elastic": false}' data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Purchase In" data-use-native-scrolling="true">
         <header data-role="header">
             <div data-role="navbar">
                 <span data-role="view-title"></span>
                 <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
             </div>
         </header>
-        <div data-role="content" id="purchasingContent">
+        <div data-role="content" id="purchasing_viewContent">
             <div id="purchasing-wrapper">
                 <div style="float:left; width: 30%">
-                    <ul data-role="listview">
-                        <li>
+                    <div class="purchasing-view-grid-window-clear">
+                        <div class="purchasing-view-grid-window-label">
                             <label>Date:</label>
-                            <input type="text" id="purchasingTransDate" style="position: absolute;right: 10px;top: 3px;width: 68%;" />
-                            <!--<input type="text" id="purchasingTransDate" />-->
-                        </li>
-                        <li>
+                        </div>
+                        <div class="purchasing-view-grid-window-input">
+                            <input id="purchasing_view_trans_date" data-role="datepicker" data-bind="value: transDateSelectedDate, events: { change: onChangeTransDate }" />
+                        </div>
+                    </div>
+                    <div class="purchasing-view-grid-window-clear">
+                        <div class="purchasing-view-grid-window-label">
                             <label>Reference:</label>
-                            <input type="text" id="purchasingTransDate" />
-                        </li>
-                        <li>
+                        </div>
+                        <div class="purchasing-view-grid-window-input">
+                            <input type="text" id="purchasing_view_reference" class="k-textbox" />
+                        </div>
+                    </div>
+                    <div class="purchasing-view-grid-window-clear">
+                        <div class="purchasing-view-grid-window-label">
                             <label>Supplier:</label>
-                            <input type="text" id="purchasingTransDate" />
-                        </li>
-                    </ul>
+                        </div>
+                        <div class="purchasing-view-grid-window-input">
+                            <input type="text" id="purchasing_view_supplier" class="k-textbox" />
+                        </div>
+                    </div>
                 </div>
-                <div style="float:left; width: 30%">
-                    <ul data-role="listview">
-                        <li>
+                <div style="float:left; width: 60%">
+                    <div class="purchasing-view-grid-window-clear">
+                        <div class="purchasing-view-grid-window-label">
                             <label>Note:</label>
-                            <textarea id="aaa" style="height:100px; text-transform: uppercase"></textarea>
-                        </li>
-                    </ul>
+                        </div>
+                        <div class="purchasing-view-grid-window-input">
+                            <textarea id="purchasing_view_note" class="k-textbox" style="height:100px; width: 440px; text-transform: uppercase"></textarea>
+                        </div>
+                    </div>
                 </div>
 
             </div>
             <div id="purchasing-wrapper" style="clear:both;">
-                <div id="purchasingDetailsGrid"></div>
+                <div id="purchasing_view_grid"></div>
             </div>
         </div>
         <footer data-role="footer">
             <div data-role="navbar">
                 <span data-align="left" id="currentUserBranch">User/Branch</span>
-                <button class="btnSave" data-align="right">SAVE</button>
-                <button class="btnCancel" data-align="right">RESET</button>
+                <button data-role="button"
+                        data-icon="save"
+                        data-align="right"
+                        data-bind="events: { click: onSave }"
+                        style="width: 100px">
+                    Save
+                </button>
+                <button data-role="button"
+                        data-icon="k-button k-save"
+                        data-align="right"
+                        data-bind="events: { click: onCancel }"
+                        style="width: 100px">
+                    Cancel
+                </button>
+            </div>
+        </footer>
+    </div>
+    <div data-role="view" id="delivery_receipt_master" data-scroller='{"elastic": false}' data-model="delivery_receipt_master" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Delivery Receipt" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="delivery_receipt_masterContent">
+            <!--<button data-role="button"
+                    data-icon="refresh"
+                    data-bind="events: { click: onRefresh }"
+                    style="width: 150px">
+                Refresh
+            </button>-->
+            delivery
+            <div id="delivery_receipt_masterGrid"></div>
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
             </div>
         </footer>
     </div>
 
+    <div data-role="view" id="clinic_request_master" data-scroller='{"elastic": false}' data-model="clinic_request_master" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Clinic Request" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="clinic_request_masterContent">
+            <!--<button data-role="button"
+                    data-icon="refresh"
+                    data-bind="events: { click: onRefresh }"
+                    style="width: 150px">
+                Refresh
+            </button>-->
+            Clinic Request
+            <div id="clinic_request_masterGrid"></div>
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+            </div>
+        </footer>
+    </div>
+
+
     <!--window-->
     <div id="LoginWindow">
-        <div class="windowHeader">
+        <div class="windowHeader1">
             Login
         </div>
         <div>
@@ -129,5 +224,111 @@
         </div>
     </div>
     <span id="notification"></span>
+
+    <div id="purchasing_view_grid_window" style="visibility:hidden"
+         data-model="purchasing_view_grid_window"
+         data-role="window"
+         data-title="Add Details"
+         data-width="320"
+         data-actions="{}"
+         data-height="400"         
+         data-bind="visible: isVisible, enabled: isEnabled, events: { open: onOpen, refresh: onRefresh }">
+
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>Barcode:</label>
+            </div>
+            <div class="purchasing-view-grid-window-input">
+                <input type="text" class="k-textbox" id="purchasing_view_grid_window_barcode" />
+            </div>
+        </div>
+        <div class="purchasing-view-grid-window-separator">
+            &nbsp;
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>Item:</label>
+            </div>
+            <div class="purchasing-view-grid-window-input">
+                <label id="purchasing_view_grid_window_item" data-item_id="0"></label>
+            </div>
+
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>Lot #:</label>
+            </div>
+            <div class="purchasing-view-grid-window-label">
+                <label id="purchasing_view_grid_window_lotnum"></label>
+            </div>
+
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>Expiration:</label>
+            </div>
+            <div class="purchasing-view-grid-window-input">
+                <input id="purchasing_view_grid_window_expiration_date" data-role="datepicker" />
+            </div>
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>Currency:</label>
+            </div>
+            <div class="purchasing-view-grid-window-input">
+                <input id="purchasing_view_grid_window_currency" data-role="combobox" data-bind="source: Currencys" />
+            </div>
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>Quantity:</label>
+            </div>
+            <div class="purchasing-view-grid-window-input">
+                <input id="purchasing_view_grid_window_quantity" data-role="numerictextbox" data-format="n0" data-value="0" data-min="0" data-max="1000000000">
+            </div>
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>MD Price:</label>
+            </div>
+            <div class="purchasing-view-grid-window-input">
+                <input id="purchasing_view_grid_window_md_price" data-role="numerictextbox" data-value="0.00" data-format="n" data-min="0">
+            </div>
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="purchasing-view-grid-window-label">
+                <label>Actual Cost:</label>
+            </div>
+            <div class="purchasing-view-grid-window-input">
+                <input id="purchasing_view_grid_window_actual_cost" data-role="numerictextbox" data-value="0.00" data-format="n" data-min="0">
+            </div>
+
+        </div>
+        <div class="purchasing-view-grid-window-separator">
+            &nbsp;
+        </div>
+        <div class="purchasing-view-grid-window-clear" style="text-align: right;">
+            <button data-role="button"
+                    data-align="left"
+                    data-bind="events: { click: onWindowInsert }"
+                    style="width: 100px">
+                Insert
+            </button>
+            <button data-role="button"
+                    data-align="right"
+                    data-bind="events: { click: onWindowClose }"
+                    style="width: 100px">
+                Close
+            </button>
+        </div>
+
+    </div>
+
+
+
+    <!--templates-->
+    <script type="text/x-kendo-template" id="editTemplate">
+        <div class="NoRecord">No record found</div>
+    </script>
 </body>
 </html>

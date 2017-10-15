@@ -164,3 +164,42 @@
     background-color: antiquewhite;
     padding: 6px;
 }
+
+.windowHeader1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;    
+    padding: 6px;
+}
+
+.k-window-title {
+    margin-top: -7px !important;
+}
+
+.purchasing-view-grid-window-text {
+    color: #2e2e2e;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: rgba(46, 46, 46, 0.2);
+    background-color: white;
+    width: 70%;
+    height: 33.9375px;
+}
+
+.purchasing-view-grid-window-label {
+    width: 120px;
+    float: left;
+}
+
+.purchasing-view-grid-window-input {
+    float: left;
+}
+
+.purchasing-view-grid-window-clear {
+    clear: both;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.purchasing-view-grid-window-separator {
+    margin: 20px;
+}
