@@ -116,7 +116,7 @@ var request_master = {
             },
             pageSize: _pageSize
         });
-                        
+        request_master_grid_column = [];
         request_master_grid_column.push({
             field: 'branch_name',
             title: 'Branch',
@@ -166,6 +166,7 @@ var request_master = {
     }
 }
 
+var purchasing_view_request_id = 0;
 var request_view_grid_window_items = [];
 API = "http://119.93.105.48:83/HOOAPI.svc/";
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
@@ -239,23 +240,17 @@ var request_view = {
             },
             schema: {
                 data: function (data) {
-                    debugger;
-                    purchasing_view_po_id = data.request_id;
-                    return [];
-                    //if (data.po_id > 0) {
-                    //    $("#purchasing_view_reference").val(data.reference);
-                    //    $("#purchasing_view_supplier").val(data.supplier);
-                    //    $("#purchasing_view_note").val(data.note);
-                    //    $("#purchasing_view_trans_date").data("kendoDatePicker").value(kendo.toString(kendo.parseDate(data.transaction_date), 'MM/dd/yyyy'));
-                    //    return data.details;
-                    //}
-                    //else {
-                    //    $("#purchasing_view_reference").val('');
-                    //    $("#purchasing_view_supplier").val('');
-                    //    $("#purchasing_view_note").val('');
-                    //    $("#purchasing_view_trans_date").data("kendoDatePicker").value(todayDate);
-                    //    return [];
-                    //}
+                    if (data.Request)
+                    {
+                        purchasing_view_request_id = data.Request.request_id;
+                        $("#request_view_trans_date").data("kendoDatePicker").value(kendo.toString(kendo.parseDate(data.Request.transaction_date), 'MM/dd/yyyy'));
+                        return data.RequestDetails;
+                    }                                        
+                    else {
+                        purchasing_view_request_id = 0;
+                        $("#request_view_trans_date").data("kendoDatePicker").value(todayDate);
+                        return [];
+                    }
 
 
                 },
@@ -316,7 +311,33 @@ var request_view = {
         }
     },
     onApproved: function (e) { },
-    onSave: function (e) { },
+    onSave: function (e) {        
+        e.preventDefault();        
+        var RequestDetails = request_view_dataSource.data();
+        var ObjRequest = new Object();
+
+        var Request = {
+            request_id: purchasing_view_request_id,
+            transaction_date: kendo.toString($("#request_view_trans_date").data('kendoDatePicker').value(), "u").replace('Z', ''),
+            created_by: 12,
+            branch_id: 1
+        }
+
+        ObjRequest.Request = Request;
+        ObjRequest.RequestDetails = RequestDetails;
+        if (purchasing_view_request_id > 0) {
+            //update
+            url = API + "Request/Update";
+        }
+        else {
+            //insert
+            url = API + "Request/Insert";
+        }
+        SharedJS.postService(url, JSON.stringify(ObjRequest), request_view.onSaveCallBack);
+    },
+    onSaveCallBack: function (data) {
+        SharedJS.navigateView("#request_master");
+    },
     onCancel: function (e) {
         SharedJS.navigateView("#request_master");
     },

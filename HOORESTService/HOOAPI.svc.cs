@@ -171,9 +171,19 @@ namespace HOORESTService
             return Requests.Instance.List();
         }
 
-        public Request RequestFindOne(string request_id)
+        public ObjRequest RequestFindOne(string request_id)
         {
             return Requests.Instance.FindOne(request_id);
+        }
+
+        public ObjRequest RequestInsert(ObjRequest p)
+        {
+            return Requests.Instance.Insert(p);
+        }
+
+        public ObjRequest RequestUpdate(ObjRequest p)
+        {
+            return Requests.Instance.Update(p);
         }
     }
 }

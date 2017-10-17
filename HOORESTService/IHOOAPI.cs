@@ -224,7 +224,21 @@ namespace HOORESTService
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,
                             BodyStyle = WebMessageBodyStyle.Bare,
                             UriTemplate = "Request/{request_id}")]
-        Request RequestFindOne(string request_id);
+        ObjRequest RequestFindOne(string request_id);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "Request/Insert")]
+        ObjRequest RequestInsert(ObjRequest p);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "Request/Update")]
+        ObjRequest RequestUpdate(ObjRequest p);
 
         #endregion
     }
