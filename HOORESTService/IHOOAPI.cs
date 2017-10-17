@@ -192,7 +192,7 @@ namespace HOORESTService
         List<Purchase> PurchaseList();
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,                            
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,
                             BodyStyle = WebMessageBodyStyle.Bare,
                             UriTemplate = "Purchasing/{po_id}")]
         Purchase PurchaseDetails(string po_id);
@@ -210,6 +210,22 @@ namespace HOORESTService
                              BodyStyle = WebMessageBodyStyle.Bare,
                              UriTemplate = "Purchasing/Update")]
         Purchase PurchasingUpdate(Purchase p);
+        #endregion
+
+        #region "Purchasing"
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                            RequestFormat = WebMessageFormat.Json,
+                            BodyStyle = WebMessageBodyStyle.Bare,
+                            UriTemplate = "Request/")]
+        List<Request> RequestList();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,
+                            BodyStyle = WebMessageBodyStyle.Bare,
+                            UriTemplate = "Request/{request_id}")]
+        Request RequestFindOne(string request_id);
+
         #endregion
     }
 }

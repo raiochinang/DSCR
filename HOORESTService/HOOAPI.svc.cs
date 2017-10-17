@@ -165,5 +165,15 @@ namespace HOORESTService
         {
             return Purchases.Instance.Update(p);
         }
+
+        public List<Request> RequestList()
+        {
+            return Requests.Instance.List();
+        }
+
+        public Request RequestFindOne(string request_id)
+        {
+            return Requests.Instance.FindOne(request_id);
+        }
     }
 }

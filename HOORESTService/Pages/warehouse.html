@@ -7,8 +7,8 @@
     <link href="~/../kendo/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="~/../kendo/styles/kendo.default.min.css" rel="stylesheet" />
     <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
-    <link href="~/../kendo/styles/kendo.black.min.css" rel="stylesheet" />
-    <link href="~/../kendo/styles/kendo.black.mobile.min.css" rel="stylesheet" />
+    <!--<link href="~/../kendo/styles/kendo.black.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.black.mobile.min.css" rel="stylesheet" />-->
     <link href="~/../styles/index.css?v=1" rel="stylesheet" />
 
     <script src="~/../kendo/js/jquery.min.js"></script>
@@ -225,15 +225,7 @@
     </div>
     <span id="notification"></span>
 
-    <div id="purchasing_view_grid_window" style="visibility:hidden"
-         data-model="purchasing_view_grid_window"
-         data-role="window"
-         data-title="Add Details"
-         data-width="320"
-         data-actions="{}"
-         data-height="400"         
-         data-bind="visible: isVisible, enabled: isEnabled, events: { open: onOpen, refresh: onRefresh }">
-
+    <div id="purchasing_view_grid_window">
         <div class="purchasing-view-grid-window-clear">
             <div class="purchasing-view-grid-window-label">
                 <label>Barcode:</label>
@@ -246,22 +238,14 @@
             &nbsp;
         </div>
         <div class="purchasing-view-grid-window-clear">
-            <div class="purchasing-view-grid-window-label">
-                <label>Item:</label>
-            </div>
-            <div class="purchasing-view-grid-window-input">
-                <label id="purchasing_view_grid_window_item" data-item_id="0"></label>
-            </div>
-
+            <div>
+                <label>Item:</label> <label style="font-weight:bold;" id="purchasing_view_grid_window_item" data-item_id="0"></label>
+            </div>            
         </div>
         <div class="purchasing-view-grid-window-clear">
-            <div class="purchasing-view-grid-window-label">
-                <label>Lot #:</label>
-            </div>
-            <div class="purchasing-view-grid-window-label">
-                <label id="purchasing_view_grid_window_lotnum"></label>
-            </div>
-
+            <div>
+                <label>Lot #:</label><label style="font-weight:bold;" id="purchasing_view_grid_window_lotnum"></label>
+            </div>           
         </div>
         <div class="purchasing-view-grid-window-clear">
             <div class="purchasing-view-grid-window-label">

@@ -698,6 +698,7 @@
     <Content Include="DSCRPrintReport.aspx" />
     <Content Include="HOOAPI.svc" />
     <Content Include="myDownloader.asmx" />
+    <Content Include="Pages\clinic.html" />
     <Content Include="Pages\command.txt" />
     <Content Include="Pages\DSCR screenshot.JPG" />
     <Content Include="Pages\dscr.html" />
@@ -1389,6 +1390,7 @@
     <Content Include="Pages\MyInvoice.aspx" />
     <Content Include="Pages\mysql.sql" />
     <Content Include="Pages\print.html" />
+    <Content Include="Pages\scripts\clinic.js" />
     <Content Include="Pages\scripts\index.js" />
     <Content Include="Pages\scripts\print.js" />
     <Content Include="Pages\scripts\purchasing.js" />
@@ -1463,6 +1465,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Purchase.cs" />
+    <Compile Include="Request.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>

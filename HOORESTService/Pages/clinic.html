@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <!--<link href="~/../styles/reset.css?v=1" rel="stylesheet" />-->
+    <link href="~/../kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    <!--<link href="~/../kendo/styles/kendo.black.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.black.mobile.min.css" rel="stylesheet" />-->
+    <link href="~/../styles/index.css?v=1" rel="stylesheet" />
+
+    <script src="~/../kendo/js/jquery.min.js"></script>
+    <script src="~/../kendo/js/kendo.all.min.js"></script>
+    <script src="~/../scripts/clinic.js?v=1"></script>
+</head>
+<body>
+    <!--drawer-->
+    <div data-role="drawer" id="left-drawer" style="width: 20em;" data-title="Menu" data-views="['home','request_master', 'request_view']" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+            </div>
+        </header>
+
+        <ul data-role="listview" class="km-listview-icons">
+            <li data-icon="cart" id="purchasing_master">
+                <a href="#request_master">
+                    Request
+                </a>
+            </li>
+            <li data-icon="logout">
+                <a href="#logout">
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!--views-->
+    <div data-role="view" id="home" data-scroller='{"elastic": false}' data-model="home_vm" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Home" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="purchasing_masterContent">
+
+            HOME
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+            </div>
+        </footer>
+    </div>
+    <div data-role="view" id="request_master" data-scroller='{"elastic": false}' data-model="request_master" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Request" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="request_masterContent">
+            <div id="request_masterGrid"></div>
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+            </div>
+        </footer>
+    </div>
+    <div data-role="view" id="request_view" data-model="request_view" data-scroller='{"elastic": false}' data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Request" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="request_viewContent">
+            <div class="purchasing-view-grid-window-clear">
+                <label>Date:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="request_view_trans_date" data-role="datepicker" />
+                <div id="request_view_grid"></div>
+            </div>
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+                <button data-role="button"
+                        data-align="right"
+                        data-bind="events: { click: onApproved }"
+                        style="width: 120px">
+                    Approved
+                </button>
+                <button data-role="button"
+                        data-icon="save"
+                        data-align="right"
+                        data-bind="events: { click: onSave }"
+                        style="width: 100px">
+                    Save
+                </button>
+                <button data-role="button"
+                        data-icon="k-button k-save"
+                        data-align="right"
+                        data-bind="events: { click: onCancel }"
+                        style="width: 100px">
+                    Cancel
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!--window-->
+    <div id="LoginWindow">
+        <div class="windowHeader1">
+            Login
+        </div>
+        <div>
+            <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="mjagapinan" />
+        </div>
+        <div>
+            <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="mjagapinan" />
+        </div>
+        <div>
+            <button class="btnLogin" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">LOG IN</button>
+        </div>
+    </div>
+    <span id="notification"></span>
+
+    <div id="request_view_grid_window" style="visibility:hidden;">       
+        <div class="purchasing-view-grid-window-clear">
+            <div class="request-view-grid-window-label">
+                <label>Item:</label>
+            </div>
+            <div class="request-view-grid-window-input">                
+                <input id="request_view_grid_window_item" data-role="combobox"  data-text-field="Name" data-value-field="Id" data-bind="source: items" style="width: 500px;" />
+            </div>            
+        </div>        
+        <div class="purchasing-view-grid-window-clear">
+            <div class="request-view-grid-window-label">
+                <label>Quantity:</label>
+            </div>
+            <div class="request-view-grid-window-input">
+                <input id="request_view_grid_window_quantity" data-role="numerictextbox" data-format="n0" data-value="1" data-min="1" data-max="1000000000">
+            </div>
+        </div>
+        <div class="purchasing-view-grid-window-clear">
+            <div class="request-view-grid-window-label">
+                <label>Note:</label>
+            </div>
+            <div class="request-view-grid-window-input">
+                <textarea id="request_view_grid_window_note" class="k-textbox" style="height:100px; width: 500px; text-transform: uppercase"></textarea>
+            </div>
+        </div>        
+        <div class="purchasing-view-grid-window-separator">
+            &nbsp;
+        </div>
+        <div class="purchasing-view-grid-window-clear" style="text-align: right;">
+            <button data-role="button"
+                    data-align="left"
+                    data-bind="events: { click: onWindowInsert }"
+                    style="width: 100px">
+                Insert
+            </button>
+            <button data-role="button"
+                    data-align="right"
+                    data-bind="events: { click: onWindowClose }"
+                    style="width: 100px">
+                Close
+            </button>
+        </div>
+
+    </div>
+    <!--templates-->
+    <script type="text/x-kendo-template" id="editTemplate">
+        <div class="NoRecord">No record found</div>
+    </script>
+</body>
+</html>

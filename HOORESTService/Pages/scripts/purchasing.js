@@ -77,7 +77,7 @@ $(document).ready(function () {
             });
         }
     });    
-    $('#LoginWindow').data("kendoWindow").center().open();
+    //$('#LoginWindow').data("kendoWindow").center().open();
     $("#notification").kendoNotification({
         position: {
             pinned: true,
@@ -224,10 +224,79 @@ var purchasing_master = {
     }
 }
 
+var purchasing_view_grid_window = kendo.observable({    
+    isVisible: false,
+    isEnabled: true,
+    onWindowClose: function (e) {
+        $("#purchasing_view_grid_window").data("kendoWindow").close();
+    },
+    onWindowInsert: function () {
+        if ($("#purchasing_view_grid_window_item").text() > "") {
+            var date = $("#purchasing_view_grid_window_expiration_date").data('kendoDatePicker').value();
+            if (date == null) {
+                date = todayDate;
+            }
+            else {
+                date = kendo.toString(date, "u").replace("Z", "");
+            }
+            var details = {
+                item_id: $("#purchasing_view_grid_window_item").data("item_id"),
+                item_name_fld: $("#purchasing_view_grid_window_item").text(),
+                lot_number: $("#purchasing_view_grid_window_lotnum").text(),
+                quantity: $("#purchasing_view_grid_window_quantity").data("kendoNumericTextBox").value(),
+                currency: $("#purchasing_view_grid_window_currency").data("kendoComboBox").value(),
+                expiration_date: date,
+                md_price: $("#purchasing_view_grid_window_md_price").data("kendoNumericTextBox").value(),
+                actual_cost: $("#purchasing_view_grid_window_actual_cost").data("kendoNumericTextBox").value(),
+            }
+            purchasing_view_dataSource.add(details);
+            $("#purchasing_view_grid_window_item").attr("data-item_id", 0);
+            $("#purchasing_view_grid_window_item").text('');
+            $("#purchasing_view_grid_window_lotnum").text('');
+            $("#purchasing_view_grid_window_quantity").data("kendoNumericTextBox").value(0);
+            $("#purchasing_view_grid_window_currency").data("kendoComboBox").value('');
+            $("#purchasing_view_grid_window_expiration_date").data('kendoDatePicker').value('');
+            $("#purchasing_view_grid_window_md_price").data("kendoNumericTextBox").value(0);
+            $("#purchasing_view_grid_window_actual_cost").data("kendoNumericTextBox").value(0)
+            $("#purchasing_view_grid_window_barcode").val("").focus();
+        }
+    },
+    Currencys: ["USD", "PHP", "EUR", "CNY", "JPY"],
+    onBarcode: function (barcode) {
+        $.get(API + "Particulars/" + barcode, function (data, status) {
+            if (data.SearchParticularsResult.length > 0) {
+                var lotnum = barcode.substring(5, 12);
+                $("#purchasing_view_grid_window_item").text(data.SearchParticularsResult[0].Name);
+                $("#purchasing_view_grid_window_item").attr("data-item_id", data.SearchParticularsResult[0].Id);
+                $("#purchasing_view_grid_window_lotnum").text(lotnum);
+            }
+            else {
+                $("#purchasing_view_grid_window_item").text('');
+                $("#purchasing_view_grid_window_lotnum").text('');
+                $("#purchasing_view_grid_window_item").attr("data-item_id", "0");
+            }
+        });
+    },
+});
+
 var purchasing_view_dataSource;
 var purchasing_view_po_id;
 var purchasing_view = {
-    onViewInit: function () {
+    onViewInit: function () {        
+        $("#purchasing_view_grid_window").kendoWindow({
+            actions: [],
+            visible: false,
+            title: false,
+            modal: true,
+            activate: function () {                
+                $('#purchasing_view_grid_window_barcode').off('input');
+                $('#purchasing_view_grid_window_barcode').on('input', function () {
+                    if ($('#purchasing_view_grid_window_barcode').val().length > barcodelength) {
+                        setTimeout(purchasing_view_grid_window.onBarcode($('#purchasing_view_grid_window_barcode').val()), 500);
+                    }
+                });
+            }
+        });
         kendo.bind($("#purchasing_view_grid_window"), purchasing_view_grid_window);
     },
     onViewShow: function (e) {
@@ -382,7 +451,7 @@ var purchasing_view = {
         }
     },
     onAddRow: function () {        
-        $("#purchasing_view_grid_window").data("kendoWindow").open().center();
+        $("#purchasing_view_grid_window").data("kendoWindow").open().center();        
         
     },
     onCancel: function () {
@@ -400,65 +469,3 @@ var clinic_request_master = {
     onViewShow: function () { }
 }
 
-var purchasing_view_grid_window = kendo.observable({
-    onOpen: function () {
-        $('#purchasing_view_grid_window_barcode').off('input');
-        $('#purchasing_view_grid_window_barcode').on('input', function () {
-            if ($('#purchasing_view_grid_window_barcode').val().length > barcodelength) {
-                setTimeout(purchasing_view_grid_window.onBarcode($('#purchasing_view_grid_window_barcode').val()), 500);
-            }
-        });
-    },
-    isVisible: false,
-    isEnabled: true,
-    onWindowClose: function (e) {
-        $("#purchasing_view_grid_window").data("kendoWindow").close();
-    },
-    onWindowInsert: function () {
-        if ($("#purchasing_view_grid_window_item").text() > "") {
-            var date = $("#purchasing_view_grid_window_expiration_date").data('kendoDatePicker').value();
-            if (date == null) {
-                date = todayDate;
-            }
-            else {
-                date = kendo.toString(date, "u").replace("Z", "");
-            }
-            var details = {
-                item_id: $("#purchasing_view_grid_window_item").data("item_id"),
-                item_name_fld: $("#purchasing_view_grid_window_item").text(),
-                lot_number: $("#purchasing_view_grid_window_lotnum").text(),
-                quantity: $("#purchasing_view_grid_window_quantity").data("kendoNumericTextBox").value(),
-                currency: $("#purchasing_view_grid_window_currency").data("kendoComboBox").value(),
-                expiration_date: date,
-                md_price: $("#purchasing_view_grid_window_md_price").data("kendoNumericTextBox").value(),
-                actual_cost: $("#purchasing_view_grid_window_actual_cost").data("kendoNumericTextBox").value(),
-            }
-            purchasing_view_dataSource.add(details);
-            $("#purchasing_view_grid_window_item").attr("data-item_id", 0);
-            $("#purchasing_view_grid_window_item").text('');
-            $("#purchasing_view_grid_window_lotnum").text('');
-            $("#purchasing_view_grid_window_quantity").data("kendoNumericTextBox").value(0);
-            $("#purchasing_view_grid_window_currency").data("kendoComboBox").value('');
-            $("#purchasing_view_grid_window_expiration_date").data('kendoDatePicker').value('');
-            $("#purchasing_view_grid_window_md_price").data("kendoNumericTextBox").value(0);
-            $("#purchasing_view_grid_window_actual_cost").data("kendoNumericTextBox").value(0)
-            $("#purchasing_view_grid_window_barcode").val("").focus();
-        }
-    },
-    Currencys: ["USD", "PHP", "EUR", "CNY", "JPY"],
-    onBarcode: function (barcode) {
-        $.get(API + "Particulars/" + barcode, function (data, status) {
-            if (data.SearchParticularsResult.length > 0) {
-                var lotnum = barcode.substring(5, 12);
-                $("#purchasing_view_grid_window_item").text(data.SearchParticularsResult[0].Name);
-                $("#purchasing_view_grid_window_item").attr("data-item_id", data.SearchParticularsResult[0].Id);
-                $("#purchasing_view_grid_window_lotnum").text(lotnum);
-            }
-            else {
-                $("#purchasing_view_grid_window_item").text('');
-                $("#purchasing_view_grid_window_lotnum").text('');
-                $("#purchasing_view_grid_window_item").attr("data-item_id", "0");
-            }
-        });
-    },    
-});
