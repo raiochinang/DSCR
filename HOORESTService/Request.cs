@@ -49,6 +49,8 @@ namespace HOORESTService
         [DataMember]
         public Request Request { get; set; }
         [DataMember]
+        public List<Request> Requests { get; set; }
+        [DataMember]
         public List<RequestDetails> RequestDetails { get; set; }
         [DataMember]
         public int total_count { get; set; }
@@ -63,12 +65,12 @@ namespace HOORESTService
             get { return _instance; }
         }
 
-        public List<Request> List()
+        public ObjRequest List()
         {
             MySQL m = new MySQL();
             string sql = string.Format("SELECT * FROM prod_syshoo_db.inv_request_vw WHERE approved_by = 0;");
             DataTable data = m.Select(sql);
-            List<Request> result = data.AsEnumerable().Select(row =>
+            List<Request> Requests = data.AsEnumerable().Select(row =>
                 new Request
                 {
                     request_id = row.Field<int>("request_id"),
@@ -79,7 +81,9 @@ namespace HOORESTService
                     created_by_name = row.Field<string>("created_by_name")
                 }).ToList();
 
-
+            ObjRequest result = new ObjRequest();
+            result.Requests = Requests;
+            result.total_count = Requests.Count();
             return result;
         }
 
@@ -182,7 +186,44 @@ namespace HOORESTService
             return p;
         }
 
+        public string Approved(Person p)
+        {
+            MySQL m = new MySQL();
+            string result = "";        
+            string sql = string.Format("SELECT * FROM prod_syshoo_db.dscr_user_vw where user_name = '{0}' and password = '{1}'", p.username, p.password);
+            DataTable data = m.Select(sql);
+            Person user = data.AsEnumerable()
+                .Select(row =>
+                new Person
+                {
+                    role = Convert.ToInt32(row.Field<uint>("role_id")),
+                    id = Convert.ToInt32(row.Field<uint>("id"))
+                }).FirstOrDefault();
 
+            if (user != null)
+            {
+                if (user.role == 3) //approver role
+                {
+                    sql = string.Format("UPDATE `prod_syshoo_db`.`inv_request` SET `approved_by` = {0} WHERE `request_id` = {1};", user.id, p.transaction_id);
+                    m.Update(sql);
+
+                    //log
+                    History h = new History();
+                    h.module = "Request";
+                    h.transaction_id = p.transaction_id;
+                    h.transaction_type = "Approved";
+                    Users.Instance.log(h);
+                    result = "valid";
+                }
+                else {
+                    result = "insufficient User Role";
+                }
+            }
+            else {
+                result = "Invalid User";
+            }
+            return result;
+        }
     }
 
 }

@@ -77,6 +77,22 @@ $(document).ready(function () {
             });
         }
     });
+    $('#ApprovedWindow').kendoWindow({
+        visible: false,
+        title: false,
+        modal: true,
+        height: 140,
+        width: 300,
+        activate: function () {
+            $('.btnLogin').kendoButton({
+                click: function () {
+                    SharedJS.login();
+                },
+                width: "100%"
+            });
+        }
+    });
+
     //$('#LoginWindow').data("kendoWindow").center().open();
     $("#notification").kendoNotification({
         position: {
@@ -92,7 +108,7 @@ $(document).ready(function () {
 var home_vm = {
     onViewInit: function () { },
     onViewShow: function (e) {
-        
+
     }
 }
 
@@ -104,7 +120,7 @@ var request_master = {
         var grid = $("#request_masterGrid").data("kendoGrid");
         if (grid != undefined) {
             grid.destroy();
-        }        
+        }
         var url = API + "Request/";
         request_master_dataSource = new kendo.data.DataSource({
             transport: {
@@ -112,7 +128,20 @@ var request_master = {
                     url: url,
                     dataType: "json",
                     type: "post",
-                }
+                },
+            },
+            schema: {
+                data: function (data) {
+                    if (data.Requests.length > 0) {
+                        return data.Requests;
+                    }
+                    else {
+                        return [];
+                    }
+
+
+                },
+                total: "total_count"
             },
             pageSize: _pageSize
         });
@@ -122,7 +151,7 @@ var request_master = {
             title: 'Branch',
             width: 50
         });
-        request_master_grid_column.push({            
+        request_master_grid_column.push({
             field: 'transaction_date',
             title: 'Date',
             template: "#= kendo.toString(kendo.parseDate(transaction_date), 'MM/dd/yyyy') #",
@@ -130,7 +159,7 @@ var request_master = {
         });
         request_master_grid_column.push({
             field: 'created_by_name',
-            title: 'Created By',            
+            title: 'Created By',
             width: 100
         });
         //request_master_grid_column.push({
@@ -150,7 +179,7 @@ var request_master = {
             dataBound: function () {
                 $("#request_masterGrid").find(".k-grid-toolbar").off("click");
                 $("#request_masterGrid").find(".k-grid-toolbar").on("click", ".k-grid-CreateNewRequest", function (e) {
-                    e.preventDefault();                    
+                    e.preventDefault();
                     SharedJS.navigateView("#request_view?ID=0");
                 });
 
@@ -159,9 +188,9 @@ var request_master = {
         });
     },
     showDetails: function (e) {
-        e.preventDefault();        
+        e.preventDefault();
         var tr = $(e.target).closest("tr");
-        var data = this.dataItem(tr);        
+        var data = this.dataItem(tr);
         SharedJS.navigateView("#request_view?ID=" + data.request_id);
     }
 }
@@ -177,7 +206,7 @@ var request_view_grid_window = kendo.observable({
         $("#request_view_grid_window").data('kendoWindow').close();
     },
     onWindowInsert: function () {
-        var toUpper = $('#request_view_grid_window_note').val();        
+        var toUpper = $('#request_view_grid_window_note').val();
         var item = {
             item_id: $('#request_view_grid_window_item').data("kendoComboBox").value(),
             item_name_fld: $('#request_view_grid_window_item').data("kendoComboBox").text(),
@@ -209,7 +238,6 @@ var request_view_grid_window = kendo.observable({
 var request_view_dataSource;
 var request_view = {
     onViewInit: function () {
-
         $("#request_view_grid_window").kendoWindow({
             actions: [],
             visible: false,
@@ -222,14 +250,15 @@ var request_view = {
                 $('#request_view_grid_window_note').val("");
             }
         });
-        kendo.bind($("#request_view_grid_window"), request_view_grid_window);        
+        kendo.bind($("#request_view_grid_window"), request_view_grid_window);
+        kendo.bind($("#ApprovedWindow"), request_view);
     },
     onViewShow: function (e) {
         var grid = $("#request_view_grid").data("kendoGrid");
         if (grid != undefined) {
             grid.destroy();
-        }        
-        var request_id = e.view.params.ID;     
+        }
+        var request_id = e.view.params.ID;
         request_view_dataSource = new kendo.data.DataSource({
             transport: {
                 read: {
@@ -240,12 +269,11 @@ var request_view = {
             },
             schema: {
                 data: function (data) {
-                    if (data.Request)
-                    {
+                    if (data.Request) {
                         purchasing_view_request_id = data.Request.request_id;
                         $("#request_view_trans_date").data("kendoDatePicker").value(kendo.toString(kendo.parseDate(data.Request.transaction_date), 'MM/dd/yyyy'));
                         return data.RequestDetails;
-                    }                                        
+                    }
                     else {
                         purchasing_view_request_id = 0;
                         $("#request_view_trans_date").data("kendoDatePicker").value(todayDate);
@@ -278,16 +306,18 @@ var request_view = {
         });
         request_view_column.push({
             field: 'note',
-            title: 'Note'            
+            title: 'Note'
         });
-        request_view_column.push({            
-            command: { text: " ", iconClass: "k-icon k-delete", click: request_view.deleteRow }, title: " ", width: "80px"
+        request_view_column.push({
+            command: { text: " ", iconClass: "k-icon k-delete", click: request_view.deleteRow }, attributes: {
+                "class": "grid-del-btn"
+            }, title: " ", width: "80px"
         });
 
         $("#request_view_grid").kendoGrid({
             dataSource: request_view_dataSource,
             pageable: true,
-            height: 450,            
+            height: 450,
             columns: request_view_column,
             dataBound: function () {
                 $("#request_view_grid").find(".k-grid-toolbar").off("click");
@@ -310,9 +340,8 @@ var request_view = {
             dataSource.sync();
         }
     },
-    onApproved: function (e) { },
-    onSave: function (e) {        
-        e.preventDefault();        
+    onSave: function (e) {
+        e.preventDefault();
         var RequestDetails = request_view_dataSource.data();
         var ObjRequest = new Object();
 
@@ -341,5 +370,30 @@ var request_view = {
     onCancel: function (e) {
         SharedJS.navigateView("#request_master");
     },
-
+    onApproved: function (e) {
+        $('#ApprovedWindow').data("kendoWindow").center().open();
+    },
+    onApprovedClick: function () {
+        url = API + "Request/Approve";
+        parameter = {
+            username: $('#ApprovedWindowUsername').val(),
+            password: $('#ApprovedWindowPassword').val(),
+            transaction_id: purchasing_view_request_id
+        }
+        SharedJS.postService(url, JSON.stringify(parameter), function (data) {
+            if (data == "valid") {
+                $('#ApprovedWindow').data("kendoWindow").close();
+                $("#notification").data("kendoNotification").show("Approved Successfully", "success");
+                SharedJS.navigateView("#request_master");
+            }
+            else {
+                $('#ApprovedWindow').data("kendoWindow").close();
+                $("#notification").data("kendoNotification").show(data, "warning");
+            }
+            //;
+        });
+    },
+    onCancelApprovedClick: function () {
+        $('#ApprovedWindow').data("kendoWindow").close();
+    }
 }

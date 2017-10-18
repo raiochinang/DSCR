@@ -168,7 +168,7 @@
 .windowHeader1 {
     font-size: 24px;
     margin-bottom: 10px;
-    text-align: center;    
+    text-align: center;
     padding: 6px;
 }
 
@@ -200,13 +200,14 @@
     padding-top: 4px;
     padding-bottom: 4px;
 }
+
 .purchasing-view-grid-window-separator {
     margin: 20px;
 }
 
 #purchasing_view_grid_window_item {
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
 }
 
 .request-view-grid-window-label {
@@ -216,4 +217,35 @@
 
 .request-view-grid-window-input {
     float: left;
+}
+
+
+.km-check:after,
+.km-check:before {
+    content: "\e037";
+}
+
+.km-save:after,
+.km-save:before {
+    content: "\e0bd";
+}
+
+.km-cancel:after,
+.km-cancel:before {
+    content: "\e036";
+}
+
+.k-delete {
+    margin: 0px !important;
+}
+
+.grid-del-btn > a {
+    margin: 0px !important;
+}
+
+
+
+.k-i-edit:after,
+.k-i-edit:before {
+    content: "\e0bd";
 }

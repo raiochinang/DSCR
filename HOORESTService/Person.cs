@@ -21,6 +21,8 @@ namespace HOORESTService
         public Branch branch { get; set; }
         [DataMember]
         public int role { get; set; }
+        [DataMember]
+        public int transaction_id { get; set; }
     }
     public partial class Persons
     {

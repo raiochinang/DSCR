@@ -218,7 +218,7 @@ namespace HOORESTService
                             RequestFormat = WebMessageFormat.Json,
                             BodyStyle = WebMessageBodyStyle.Bare,
                             UriTemplate = "Request/")]
-        List<Request> RequestList();
+        ObjRequest RequestList();
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,
@@ -239,6 +239,13 @@ namespace HOORESTService
                              BodyStyle = WebMessageBodyStyle.Bare,
                              UriTemplate = "Request/Update")]
         ObjRequest RequestUpdate(ObjRequest p);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
+                             RequestFormat = WebMessageFormat.Json,
+                             BodyStyle = WebMessageBodyStyle.Bare,
+                             UriTemplate = "Request/Approve")]
+        string RequestApprove(Person p);        
 
         #endregion
     }

@@ -166,7 +166,7 @@ namespace HOORESTService
             return Purchases.Instance.Update(p);
         }
 
-        public List<Request> RequestList()
+        public ObjRequest RequestList()
         {
             return Requests.Instance.List();
         }
@@ -184,6 +184,11 @@ namespace HOORESTService
         public ObjRequest RequestUpdate(ObjRequest p)
         {
             return Requests.Instance.Update(p);
+        }
+
+        public string RequestApprove(Person p)
+        {
+            return Requests.Instance.Approved(p);
         }
     }
 }

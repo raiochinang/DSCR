@@ -27,6 +27,16 @@ namespace HOORESTService
         public int current_user_id { get; set; }
     }
 
+    public class History
+    {
+        [DataMember]
+        public string module { get; set; }
+        [DataMember]
+        public int transaction_id { get; set; }
+        [DataMember]
+        public string transaction_type { get; set; }
+    }
+
     public partial class Users
     {
         private static readonly Users _instance = new Users();
@@ -68,6 +78,13 @@ namespace HOORESTService
             m.Insert(sql);
 
             return UserList;
+        }
+
+        public void log(History p)
+        {
+            MySQL m = new MySQL();
+            string sql = string.Format("CALL `prod_syshoo_db`.`sp_inv_history_log_insert`('{0}', {1}, '{2}');", p.module, p.transaction_id, p.transaction_type);
+            m.Insert(sql);
         }
     }
 }

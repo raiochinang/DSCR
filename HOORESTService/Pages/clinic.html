@@ -7,8 +7,8 @@
     <link href="~/../kendo/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="~/../kendo/styles/kendo.default.min.css" rel="stylesheet" />
     <link href="~/../kendo/styles/kendo.default.mobile.min.css" rel="stylesheet" />
-    <link href="~/../kendo/styles/kendo.black.min.css" rel="stylesheet" />
-    <link href="~/../kendo/styles/kendo.black.mobile.min.css" rel="stylesheet" />
+    <!--<link href="~/../kendo/styles/kendo.black.min.css" rel="stylesheet" />
+    <link href="~/../kendo/styles/kendo.black.mobile.min.css" rel="stylesheet" />-->
     <link href="~/../styles/index.css?v=1" rel="stylesheet" />
 
     <script src="~/../kendo/js/jquery.min.js"></script>
@@ -90,19 +90,20 @@
                 <span data-align="left" id="currentUserBranch">User/Branch</span>
                 <button data-role="button"
                         data-align="right"
+                        data-icon="km-button km-check"
                         data-bind="events: { click: onApproved }"
                         style="width: 120px">
                     Approved
                 </button>
                 <button data-role="button"
-                        data-icon="save"
+                        data-icon="km-button km-save"
                         data-align="right"
                         data-bind="events: { click: onSave }"
                         style="width: 100px">
                     Save
                 </button>
                 <button data-role="button"
-                        data-icon="k-button k-save"
+                        data-icon="km-button km-cancel"
                         data-align="right"
                         data-bind="events: { click: onCancel }"
                         style="width: 100px">
@@ -127,17 +128,40 @@
             <button class="btnLogin" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">LOG IN</button>
         </div>
     </div>
+    <div id="ApprovedWindow" data-model="request_view">
+        <div>
+            <input type="text" class="r-text" id="ApprovedWindowUsername" placeholder="USERNAME" value="mjagapinan" />
+        </div>
+        <div>
+            <input type="password" class="r-text" id="ApprovedWindowPassword" placeholder="PASSWORD" value="mjagapinan" />
+        </div>
+        <div style="margin-top: 10px;">
+            <button data-role="button"                    
+                    data-align="right"
+                    data-bind="events: { click: onApprovedClick }"
+                    style="width: 120px">
+                Approved
+            </button>
+            <button data-role="button"                    
+                    data-align="left"                    
+                    data-bind="events: { click: onCancelApprovedClick }"
+                    id="testButton"
+                    style="width: 100px">
+                Cancel
+            </button>
+        </div>
+    </div>
     <span id="notification"></span>
 
-    <div id="request_view_grid_window" style="visibility:hidden;">       
+    <div id="request_view_grid_window" style="visibility:hidden;">
         <div class="purchasing-view-grid-window-clear">
             <div class="request-view-grid-window-label">
                 <label>Item:</label>
             </div>
-            <div class="request-view-grid-window-input">                
-                <input id="request_view_grid_window_item" data-role="combobox"  data-text-field="Name" data-value-field="Id" data-bind="source: items" style="width: 500px;" />
-            </div>            
-        </div>        
+            <div class="request-view-grid-window-input">
+                <input id="request_view_grid_window_item" data-role="combobox" data-text-field="Name" data-value-field="Id" data-bind="source: items" style="width: 500px;" />
+            </div>
+        </div>
         <div class="purchasing-view-grid-window-clear">
             <div class="request-view-grid-window-label">
                 <label>Quantity:</label>
@@ -153,7 +177,7 @@
             <div class="request-view-grid-window-input">
                 <textarea id="request_view_grid_window_note" class="k-textbox" style="height:100px; width: 500px; text-transform: uppercase"></textarea>
             </div>
-        </div>        
+        </div>
         <div class="purchasing-view-grid-window-separator">
             &nbsp;
         </div>
