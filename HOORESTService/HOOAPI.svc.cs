@@ -166,9 +166,9 @@ namespace HOORESTService
             return Purchases.Instance.Update(p);
         }
 
-        public ObjRequest RequestList()
+        public ObjRequest RequestList(string branch_id)
         {
-            return Requests.Instance.List();
+            return Requests.Instance.List(branch_id);
         }
 
         public ObjRequest RequestFindOne(string request_id)

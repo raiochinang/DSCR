@@ -65,22 +65,20 @@ namespace HOORESTService
             get { return _instance; }
         }
 
-        public ObjRequest List()
+        public ObjRequest List(string branch_id)
         {
             MySQL m = new MySQL();
-            string sql = string.Format("SELECT * FROM prod_syshoo_db.inv_request_vw WHERE approved_by = 0;");
+            string sql = string.Format("SELECT * FROM prod_syshoo_db.inv_request_vw WHERE branch_id = {0};",Convert.ToInt32(branch_id));
             DataTable data = m.Select(sql);
             List<Request> Requests = data.AsEnumerable().Select(row =>
                 new Request
                 {
-                    request_id = row.Field<int>("request_id"),
-                    branch_id = row.Field<int>("branch_id"),
+                    request_id = row.Field<int>("request_id"),                    
                     branch_name = row.Field<string>("branch_name"),
-                    transaction_date = Convert.ToString(row.Field<DateTime>("transaction_date")),
-                    created_by = row.Field<int>("created_by"),
+                    transaction_date = Convert.ToString(row.Field<DateTime>("transaction_date")),                    
                     created_by_name = row.Field<string>("created_by_name")
                 }).ToList();
-
+            
             ObjRequest result = new ObjRequest();
             result.Requests = Requests;
             result.total_count = Requests.Count();
@@ -129,7 +127,7 @@ namespace HOORESTService
             MySQL m = new MySQL();
             int request_id = 0;
             string trx_date = p.Request.transaction_date.Substring(0, p.Request.transaction_date.Length - 1);
-
+            
             //main
             string sql = string.Format("CALL `prod_syshoo_db`.`sp_inv_request_insert`('{0}', '{1}', '{2}', '{3}');", p.Request.branch_id, p.Request.transaction_date, p.Request.created_by, 0);
             System.Data.DataTable data = m.Select(sql);
@@ -137,6 +135,18 @@ namespace HOORESTService
             {
                 request_id = Convert.ToInt32(data.Rows[0][0]);
             }
+
+            //log
+            History h = new History();
+            h.module = "Request";
+            h.transaction_id = request_id;
+            h.transaction_type = "Create";
+            h.user_id = p.Request.created_by;
+            Users.Instance.log(h);
+
+            //process
+            sql = string.Format("INSERT INTO `prod_syshoo_db`.`inv_process`(`request_id`) VALUES ({0});", request_id);
+            m.Insert(sql);
 
             if (p.RequestDetails.Count > 0)
             {
@@ -168,7 +178,14 @@ namespace HOORESTService
             sql = string.Format("DELETE FROM `prod_syshoo_db`.`inv_request_details` WHERE request_id = {0};", p.Request.request_id);
             m.Delete(sql);
 
-            //delete
+            History h = new History();
+            h.module = "Request";
+            h.transaction_id = p.Request.request_id;
+            h.transaction_type = "Update";
+            h.user_id = p.Request.created_by;
+            Users.Instance.log(h);
+
+            //insert
             if (p.RequestDetails.Count > 0)
             {
                 StringBuilder detail = new StringBuilder();
@@ -212,11 +229,12 @@ namespace HOORESTService
                     h.module = "Request";
                     h.transaction_id = p.transaction_id;
                     h.transaction_type = "Approved";
+                    h.user_id = user.id;
                     Users.Instance.log(h);
                     result = "valid";
                 }
                 else {
-                    result = "insufficient User Role";
+                    result = "Insufficient User Role";
                 }
             }
             else {

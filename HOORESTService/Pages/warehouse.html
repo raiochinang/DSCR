@@ -150,7 +150,7 @@
                     Save
                 </button>
                 <button data-role="button"
-                        data-icon="k-button k-save"
+                       data-icon="km-button km-cancel"
                         data-align="right"
                         data-bind="events: { click: onCancel }"
                         style="width: 100px">
@@ -167,13 +167,6 @@
             </div>
         </header>
         <div data-role="content" id="delivery_receipt_masterContent">
-            <!--<button data-role="button"
-                    data-icon="refresh"
-                    data-bind="events: { click: onRefresh }"
-                    style="width: 150px">
-                Refresh
-            </button>-->
-            delivery
             <div id="delivery_receipt_masterGrid"></div>
         </div>
         <footer data-role="footer">
@@ -182,7 +175,41 @@
             </div>
         </footer>
     </div>
+    <div data-role="view" id="delivery_receipt_view" data-model="delivery_receipt_view" data-scroller='{"elastic": false}' data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Delivery Receipt" data-use-native-scrolling="true">
+        <header data-role="header">
+            <div data-role="navbar">
+                <span data-role="view-title"></span>
+                <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
+            </div>
+        </header>
+        <div data-role="content" id="delivery_receipt_viewContent">
+            <div id="main-pane" data-role="splitter" data-orientation="horizontal"
+                 data-panes="[{collapsible: true, size: '50%'},{ collapsible: false, size: '50%' }]">
+                <div id="left-pane"><p>Center</p></div>
+                <div id="rigth-pane"><p>Center</p></div>
+            </div>
 
+        </div>
+        <footer data-role="footer">
+            <div data-role="navbar">
+                <span data-align="left" id="currentUserBranch">User/Branch</span>
+                <button data-role="button"
+                        data-icon="save"
+                        data-align="right"
+                        data-bind="events: { click: onSave }"
+                        style="width: 100px">
+                    Save
+                </button>
+                <button data-role="button"
+                        data-icon="k-button k-save"
+                        data-align="right"
+                        data-bind="events: { click: onCancel }"
+                        style="width: 100px">
+                    Cancel
+                </button>
+            </div>
+        </footer>
+    </div>
     <div data-role="view" id="clinic_request_master" data-scroller='{"elastic": false}' data-model="clinic_request_master" data-bind="events: { init: onViewInit, show: onViewShow }" data-title="Clinic Request" data-use-native-scrolling="true">
         <header data-role="header">
             <div data-role="navbar">
@@ -240,12 +267,12 @@
         <div class="purchasing-view-grid-window-clear">
             <div>
                 <label>Item:</label> <label style="font-weight:bold;" id="purchasing_view_grid_window_item" data-item_id="0"></label>
-            </div>            
+            </div>
         </div>
         <div class="purchasing-view-grid-window-clear">
             <div>
                 <label>Lot #:</label><label style="font-weight:bold;" id="purchasing_view_grid_window_lotnum"></label>
-            </div>           
+            </div>
         </div>
         <div class="purchasing-view-grid-window-clear">
             <div class="purchasing-view-grid-window-label">

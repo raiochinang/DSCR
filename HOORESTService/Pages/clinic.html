@@ -46,13 +46,13 @@
                 <a data-role="button" data-rel="drawer" href="#left-drawer" data-icon="mydrawer" data-align="left"></a>
             </div>
         </header>
-        <div data-role="content" id="purchasing_masterContent">
-
-            HOME
+        <div data-role="content" id="purchasing_homeContent">
         </div>
         <footer data-role="footer">
             <div data-role="navbar">
-                <span data-align="left" id="currentUserBranch">User/Branch</span>
+                <span data-align="left" class="currentUser"></span>
+                <span data-align="left">/</span>
+                <span data-align="left" class="currentBranch"></span>
             </div>
         </footer>
     </div>
@@ -68,7 +68,9 @@
         </div>
         <footer data-role="footer">
             <div data-role="navbar">
-                <span data-align="left" id="currentUserBranch">User/Branch</span>
+                <span data-align="left" class="currentUser"></span>
+                <span data-align="left">/</span>
+                <span data-align="left" class="currentBranch"></span>
             </div>
         </footer>
     </div>
@@ -87,7 +89,9 @@
         </div>
         <footer data-role="footer">
             <div data-role="navbar">
-                <span data-align="left" id="currentUserBranch">User/Branch</span>
+                <span data-align="left" class="currentUser"></span>
+                <span data-align="left">/</span>     
+                <span data-align="left" class="currentBranch"></span>
                 <button data-role="button"
                         data-align="right"
                         data-icon="km-button km-check"
@@ -114,18 +118,20 @@
     </div>
 
     <!--window-->
-    <div id="LoginWindow">
-        <div class="windowHeader1">
-            Login
-        </div>
+    <div id="LoginWindow">       
         <div>
             <input type="text" class="r-text" id="LoginWindowUsername" placeholder="USERNAME" value="mjagapinan" />
         </div>
         <div>
             <input type="password" class="r-text" id="LoginWindowPassword" placeholder="PASSWORD" value="mjagapinan" />
         </div>
-        <div>
-            <button class="btnLogin" data-align="center" style="position:absolute; bottom: 4px; right: 10px;">LOG IN</button>
+        <div style="margin: auto;width: 50%;padding: 10px;">
+            <button data-role="button"
+                    data-align="center"
+                    data-bind="events: { click: onLogin }"
+                    style="width: 120px">
+                Log In
+            </button>
         </div>
     </div>
     <div id="ApprovedWindow" data-model="request_view">

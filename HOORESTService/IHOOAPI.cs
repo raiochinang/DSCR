@@ -212,13 +212,12 @@ namespace HOORESTService
         Purchase PurchasingUpdate(Purchase p);
         #endregion
 
-        #region "Purchasing"
+        #region "Request"       
         [OperationContract]
-        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,
-                            RequestFormat = WebMessageFormat.Json,
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,
                             BodyStyle = WebMessageBodyStyle.Bare,
-                            UriTemplate = "Request/")]
-        ObjRequest RequestList();
+                            UriTemplate = "GetRequests/{branch_id}")]
+        ObjRequest RequestList(string branch_id);
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json,

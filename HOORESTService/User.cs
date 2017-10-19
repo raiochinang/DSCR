@@ -35,6 +35,8 @@ namespace HOORESTService
         public int transaction_id { get; set; }
         [DataMember]
         public string transaction_type { get; set; }
+        [DataMember]
+        public int user_id { get; set; }
     }
 
     public partial class Users
@@ -83,7 +85,7 @@ namespace HOORESTService
         public void log(History p)
         {
             MySQL m = new MySQL();
-            string sql = string.Format("CALL `prod_syshoo_db`.`sp_inv_history_log_insert`('{0}', {1}, '{2}');", p.module, p.transaction_id, p.transaction_type);
+            string sql = string.Format("CALL `prod_syshoo_db`.`sp_inv_history_log_insert`('{0}', {1}, '{2}', {3});", p.module, p.transaction_id, p.transaction_type, p.user_id);
             m.Insert(sql);
         }
     }

@@ -5,6 +5,9 @@ var _pageSize = 10;
 var barcodelength = 11;
 var todayDate = kendo.toString(kendo.parseDate(new Date()), 'MM/dd/yyyy');
 var API, url;
+var _branch_id;
+var _user;
+
 $(document).ready(function () {
     kendo.mobile.ui.Drawer.current = null;
     app = new kendo.mobile.Application(
@@ -66,7 +69,7 @@ $(document).ready(function () {
         visible: false,
         title: false,
         modal: true,
-        height: 180,
+        height: 140,
         width: 300,
         activate: function () {
             $('.btnLogin').kendoButton({
@@ -92,8 +95,6 @@ $(document).ready(function () {
             });
         }
     });
-
-    //$('#LoginWindow').data("kendoWindow").center().open();
     $("#notification").kendoNotification({
         position: {
             pinned: true,
@@ -103,12 +104,46 @@ $(document).ready(function () {
             right: 10
         }
     });
+
+
+
+    kendo.bind($("#LoginWindow"), home_vm);    
+    if (_user == undefined) {        
+        setTimeout(function () {
+            $('#LoginWindow').data("kendoWindow").center().open();
+            SharedJS.navigateView("#home");
+        }, 500);
+
+        
+    }
 });
 
 var home_vm = {
     onViewInit: function () { },
     onViewShow: function (e) {
 
+    },
+    onLogin: function (e) {
+        url = API + "Login/";
+        parameter = {
+            username: $('#LoginWindowUsername').val(),
+            password: $('#LoginWindowPassword').val(),
+        }
+        SharedJS.postService(url, JSON.stringify(parameter), function (data) {
+            if (data.id > 0) {
+                $('#LoginWindow').data("kendoWindow").close();
+                _user = {
+                    username: data.username,
+                    branch_id: data.branch.id
+                };
+                var user = data.username;
+                _branch_id = data.branch.id;
+                var branch = data.branch.store_code_fld;
+                $('.currentUser').text(user);
+                $('.currentBranch').text(branch);
+            }
+            //
+        });
     }
 }
 
@@ -121,14 +156,16 @@ var request_master = {
         if (grid != undefined) {
             grid.destroy();
         }
+
         var url = API + "Request/";
+        _branch_id = 1;
         request_master_dataSource = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: url,
-                    dataType: "json",
-                    type: "post",
-                },
+                    url: API + "GetRequests/" + _branch_id,
+                    type: "get",
+                    dataType: "json"
+                }
             },
             schema: {
                 data: function (data) {

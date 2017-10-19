@@ -76,7 +76,24 @@ $(document).ready(function () {
                 width: "100%"
             });
         }
-    });    
+    });
+
+    $("#purchasing_view_grid_window").kendoWindow({
+        actions: [],
+        visible: false,
+        title: false,
+        modal: true,
+        activate: function () {
+            $('#purchasing_view_grid_window_barcode').off('input');
+            $('#purchasing_view_grid_window_barcode').on('input', function () {
+                if ($('#purchasing_view_grid_window_barcode').val().length > barcodelength) {
+                    setTimeout(purchasing_view_grid_window.onBarcode($('#purchasing_view_grid_window_barcode').val()), 500);
+                }
+            });
+        }
+    });
+    kendo.bind($("#purchasing_view_grid_window"), purchasing_view_grid_window);
+
     //$('#LoginWindow').data("kendoWindow").center().open();
     $("#notification").kendoNotification({
         position: {
@@ -283,21 +300,7 @@ var purchasing_view_dataSource;
 var purchasing_view_po_id;
 var purchasing_view = {
     onViewInit: function () {        
-        $("#purchasing_view_grid_window").kendoWindow({
-            actions: [],
-            visible: false,
-            title: false,
-            modal: true,
-            activate: function () {                
-                $('#purchasing_view_grid_window_barcode').off('input');
-                $('#purchasing_view_grid_window_barcode').on('input', function () {
-                    if ($('#purchasing_view_grid_window_barcode').val().length > barcodelength) {
-                        setTimeout(purchasing_view_grid_window.onBarcode($('#purchasing_view_grid_window_barcode').val()), 500);
-                    }
-                });
-            }
-        });
-        kendo.bind($("#purchasing_view_grid_window"), purchasing_view_grid_window);
+        
     },
     onViewShow: function (e) {
         var grid = $("#purchasing_view_grid").data("kendoGrid");
@@ -459,9 +462,95 @@ var purchasing_view = {
     },
 }
 
+var request_view_dataSource;
+var request_master_grid_column;
+var request_master_dataSource;
 var delivery_receipt_master = {
-    onViewInit: function () { },
-    onViewShow: function () { }
+    onViewInit: function (e) { },
+    onViewShow: function (e) {
+        var grid = $("#delivery_receipt_masterGrid").data("kendoGrid");
+        if (grid != undefined) {
+            grid.destroy();
+        }
+        var url = API + "Request/";
+        request_master_dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: url,
+                    dataType: "json",
+                    type: "post",
+                },
+            },
+            schema: {
+                data: function (data) {
+                    if (data.Requests.length > 0) {
+                        return data.Requests;
+                    }
+                    else {
+                        return [];
+                    }
+
+
+                },
+                total: "total_count"
+            },
+            pageSize: _pageSize
+        });
+        request_master_grid_column = [];
+        request_master_grid_column.push({
+            field: 'branch_name',
+            title: 'Branch',
+            width: 50
+        });
+        request_master_grid_column.push({
+            field: 'transaction_date',
+            title: 'Date',
+            template: "#= kendo.toString(kendo.parseDate(transaction_date), 'MM/dd/yyyy') #",
+            width: 50
+        });
+        request_master_grid_column.push({
+            field: 'created_by_name',
+            title: 'Created By',
+            width: 100
+        });
+        request_master_grid_column.push({
+            field: 'approved_by_name',
+            title: 'Approved By',
+            width: 100
+        });
+        request_master_grid_column.push({
+            command: { text: "Create DR", click: delivery_receipt_master.CreateDR }, title: " ", width: "50px"
+        });
+
+        $("#delivery_receipt_masterGrid").kendoGrid({
+            dataSource: request_master_dataSource,
+            pageable: true,
+            height: 450,
+            columns: request_master_grid_column,
+            dataBound: function () {
+                //$("#request_masterGrid").find(".k-grid-toolbar").off("click");
+                //$("#request_masterGrid").find(".k-grid-toolbar").on("click", ".k-grid-CreateNewRequest", function (e) {
+                //    e.preventDefault();
+                //    SharedJS.navigateView("#request_view?ID=0");
+                //});
+
+            },
+            //toolbar: [{ text: "Create New Request", iconClass: "k-icon k-add" }],
+        });
+    },
+    CreateDR: function (e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr");
+        var data = this.dataItem(tr);        
+        SharedJS.navigateView("#delivery_receipt_view?ID=" + data.request_id);
+    }
+}
+
+var delivery_receipt_view = {
+    onViewInit: function (e) { },
+    onViewShow: function (e) {
+        debugger;
+    },
 }
 
 var clinic_request_master = {
